@@ -4,9 +4,6 @@ export default async function PrivatePage() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   console.log(data.user);
-  // if (!data?.user) {
-  //   redirect("/login");
-  // }
 
   return (
     <header className='w-full flex flex-row gap-2 p-4 border-b-[1px] border-white border-solid justify-between'>
