@@ -1,12 +1,13 @@
-import Image from "next/image";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <div>
-      <a href='/login'>Login</a>
-      <a href='/dashboard'>Dashboard</a>
-      <a href='/error'>Error</a>
-      <a href='/logout'> Logout</a>
-    </div>
-  );
+export default async function Home() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    redirect("/login");
+  } else {
+    redirect("/dashboard");
+  }
 }

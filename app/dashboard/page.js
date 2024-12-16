@@ -2,7 +2,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Header from "@/components/Header";
 import SideMenu from "@/components/SideMenu";
-import Chat from "@/components/Chat";
+import Chat from "@/components/chat/Chat";
 
 export default async function PrivatePage() {
   const supabase = await createClient();
