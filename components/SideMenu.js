@@ -15,6 +15,7 @@ function SideMenu({ userData }) {
         <img
           src={userData.user_metadata.picture}
           className="aspect-square w-full"
+          alt="Send Button"
         />
       </figure>
       <div className="flex flex-col gap-2 py-2">
