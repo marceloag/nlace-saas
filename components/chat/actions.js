@@ -1,26 +1,38 @@
-"use server";
+'use server';
 
-export async function sendMessage() {
-  // console.log("sendMessage message:", content);
-  // return { message: "Hello, World!" };
+export async function sendMessage(prompt) {
+  console.log('Action Value Received:', prompt);
+  const response = await fetch('https://n8n.marceloag.dev/webhook/chat-nlace', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ prompt })
+  });
+  const result = await response.json();
+  console.log(result);
 
-  try {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    // response to json
-    console.log(response);
+  return {
+    message: result.output
+  };
 
-    return {
-      message: response,
-    };
-  } catch (error) {
-    console.error("Error in sendMessage:", error);
-    throw error;
-  }
+  // try {
+  //   const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   // response to json
+  //   console.log(response);
+
+  //   return {
+  //     message: response,
+  //   };
+  // } catch (error) {
+  //   console.error("Error in sendMessage:", error);
+  //   throw error;
+  // }
 
   // try {
   //   const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/chat`, {
