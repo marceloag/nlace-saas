@@ -32,7 +32,7 @@ function Chat() {
       };
       setMessages((prev) => [...prev, systemMessage]);
     } catch (error) {
-      console.error('Failed to send message:');
+      console.error('Failed to send message:', error);
     } finally {
       console.log(messages);
     }
