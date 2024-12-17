@@ -1,9 +1,9 @@
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse } from "next/server";
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse } from 'next/server';
 
 export async function updateSession(request) {
   let supabaseResponse = NextResponse.next({
-    request,
+    request
   });
 
   const supabase = createServerClient(
@@ -19,13 +19,30 @@ export async function updateSession(request) {
             request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({
-            request,
+            request
           });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           );
         },
-      },
+        remove(name, options) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers
+            }
+          });
+          response.cookies.set({
+            name,
+            value: '',
+            ...options
+          });
+        }
+      }
     }
   );
 
@@ -36,18 +53,18 @@ export async function updateSession(request) {
   // IMPORTANT: DO NOT REMOVE auth.getUser()
 
   const {
-    data: { user },
+    data: { user }
   } = await supabase.auth.getUser();
 
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/auth')
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    console.log("Redirecting to /login from middleware");
-    url.pathname = "/login";
+    console.log('Redirecting to /login from middleware');
+    url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
