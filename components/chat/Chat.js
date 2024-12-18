@@ -24,9 +24,10 @@ function Chat() {
 
     try {
       const response = await sendMessage(prompt.trim());
+      const answer = await response.output;
       const systemMessage = {
         id: (Date.now() + 1).toString(),
-        content: response.output,
+        content: answer,
         role: 'system',
         timestamp: new Date()
       };
