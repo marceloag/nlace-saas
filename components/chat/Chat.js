@@ -26,7 +26,7 @@ function Chat() {
       const response = await sendMessage(prompt.trim());
       const systemMessage = {
         id: (Date.now() + 1).toString(),
-        content: response.message,
+        content: response.output,
         role: 'system',
         timestamp: new Date()
       };
