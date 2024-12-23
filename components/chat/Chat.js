@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { generarPauta, sendMessage } from './actions';
 import Markdown from 'react-markdown';
 
-function Chat() {
+function Chat({ userId }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pauta, setPauta] = useState('');
@@ -43,7 +43,7 @@ function Chat() {
     setPrompt('');
     // setIsLoading(true);
     try {
-      const response = await sendMessage(prompt.trim(), pauta);
+      const response = await sendMessage(prompt.trim(), pauta, userId);
       const systemMessage = {
         id: (Date.now() + 1).toString(),
         content: response.message,

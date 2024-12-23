@@ -19,7 +19,7 @@ export default async function PrivatePage() {
             </h1>
           </div>
 
-          <Chat />
+          <Chat userId={data.user.id} />
           <div>
             <span className="text-xs text-gray-300"> V0.0.3</span>
           </div>
