@@ -1,11 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { generarPauta, sendMessage } from './actions';
+import Loading from '../ui/Loading';
 import Markdown from 'react-markdown';
+import { motion } from 'motion/react';
 
 function Chat({ userId }) {
   const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [pauta, setPauta] = useState('');
   const [loadingPauta, setLoadingPauta] = useState(true);
   const [prompt, setPrompt] = useState('');
@@ -41,7 +43,8 @@ function Chat({ userId }) {
 
     setMessages((prev) => [...prev, userMessage]);
     setPrompt('');
-    // setIsLoading(true);
+    setIsLoading(true);
+
     try {
       const response = await sendMessage(prompt.trim(), pauta, userId);
       const systemMessage = {
@@ -54,6 +57,7 @@ function Chat({ userId }) {
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
+      setIsLoading(false);
       console.log(messages);
     }
   };
@@ -109,7 +113,10 @@ function Chat({ userId }) {
           </div>
         )}
         {messages.map((message) => (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             key={message.id}
             className={`flex flex-col items-start ${
               message.role === 'user' ? 'items-end' : ''
@@ -127,19 +134,31 @@ function Chat({ userId }) {
             <div className="text-xs text-gray-400 px-4">
               {message.timestamp.toLocaleTimeString()}
             </div>
-          </div>
+          </motion.div>
         ))}
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-row items-start justify-start h-auto mb-10 gap-6"
+          >
+            <div className="mensajecontent bg-white rounded-2xl p-4 m-2 drop-shadow-sm ">
+              <Loading />
+            </div>
+          </motion.div>
+        )}
       </div>
       <div className="rounded-2xl p-[1px] bg-gradient-to-br from-[#ffc4f9] to-[#95a9fc] w-1/2 mx-auto transition-all duration-300 opacity-90 ease-in-out">
         <div className="relative">
           <textarea
-            className="bg-white rounded-2xl w-full mx-auto self-center h-22 border-[1px] border-solid border-gray-200 p-4 text-gray-400 m-0 resize-none focus:outline-none opacity-100!"
+            className="bg-white rounded-2xl w-full mx-auto self-center h-22 border-[1px] border-solid border-gray-200 p-4 text-gray-400 m-0 resize-none focus:outline-none opacity-100! pr-20"
             placeholder="Escribe aquí lo que quieras ..."
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
           ></textarea>
           <a
-            className="flex flex-col items-center justify-center bg-gradient-to-br from-[#ffc4f9] to-[#95a9fc] absolute w-10 h-10 text-white z-10 right-2 top-2 rounded-full cursor-pointer"
+            className="flex flex-col items-center justify-center bg-gradient-to-br from-[#ffc4f9] to-[#95a9fc] absolute w-10 h-10 text-white z-10 right-2 top-5 rounded-full cursor-pointer"
             onClick={handleSubmit}
           >
             <svg
