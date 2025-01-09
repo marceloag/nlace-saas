@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -18,31 +18,16 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-
-// const accounts = [
-//   {
-//     id: '1',
-//     name: 'Alicia Koch',
-//     email: 'alicia@example.com',
-//     avatarUrl: '/placeholder.svg?height=32&width=32'
-//   },
-//   {
-//     id: '2',
-//     name: 'Acme Inc.',
-//     email: 'acme@example.com',
-//     avatarUrl: '/placeholder.svg?height=32&width=32'
-//   },
-//   {
-//     id: '3',
-//     name: 'Monsters Inc.',
-//     email: 'monsters@example.com',
-//     avatarUrl: '/placeholder.svg?height=32&width=32'
-//   }
-// ];
+import { useAccount } from '@/context/AccountContext';
 
 export default function AccountSwitcher({ accounts }) {
   const [open, setOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
+  const { setCurrentAccount } = useAccount();
+
+  useEffect(() => {
+    setCurrentAccount(accounts[0]);
+  }, [accounts]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -76,6 +61,7 @@ export default function AccountSwitcher({ accounts }) {
                   key={account.id}
                   onSelect={() => {
                     setSelectedAccount(account);
+                    setCurrentAccount(account);
                     setOpen(false);
                   }}
                   className="text-sm"

@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import Header from '@/components/Header';
 import SideMenu from '@/components/SideMenu';
 import Chat from '@/components/chat/Chat';
+import { AccountProvider } from '@/context/AccountContext';
 
 export async function getAccounts() {
   const supabase = await createClient();
@@ -17,16 +18,18 @@ export default async function DashboardLayout({ children }) {
 
   return (
     <section className="flex flex-row bg-gray-50">
-      <SideMenu userData={data.user} />
-      <main className="w-full flex flex-1 flex-col py-2 min-h-screen ">
-        <Header cuentas={accounts} />
-        <div className="flex flex-col my-6 mx-4 w-full justify-between h-[100%] relative">
-          {children}
-          <div>
-            <span className="text-xs text-gray-300"> V0.0.3</span>
+      <AccountProvider>
+        <SideMenu userData={data.user} />
+        <main className="w-full flex flex-1 flex-col py-2 min-h-screen ">
+          <Header cuentas={accounts} />
+          <div className="flex flex-col my-6 mx-4 w-full justify-between h-[100%] relative">
+            {children}
+            <div>
+              <span className="text-xs text-gray-300"> V0.0.3</span>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </AccountProvider>
     </section>
   );
 }

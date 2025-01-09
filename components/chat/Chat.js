@@ -4,6 +4,7 @@ import { generarPauta, sendMessage } from './actions';
 import Loading from '../ui/Loading';
 import Markdown from 'react-markdown';
 import { motion } from 'motion/react';
+import { useAccount } from '@/context/AccountContext';
 
 function Chat({ userId }) {
   const [messages, setMessages] = useState([]);
@@ -12,6 +13,7 @@ function Chat({ userId }) {
   const [loadingPauta, setLoadingPauta] = useState(true);
   const [prompt, setPrompt] = useState('');
   const [opacity, setOpacity] = useState('opacity-100');
+  const { currentAccount } = useAccount();
 
   useEffect(() => {
     const fetchPauta = async () => {

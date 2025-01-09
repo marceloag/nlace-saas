@@ -1,19 +1,9 @@
 import { createClient } from '@/utils/supabase/server';
-import Header from '@/components/Header';
-import SideMenu from '@/components/SideMenu';
 import Chat from '@/components/chat/Chat';
-
-export async function getAccounts() {
-  const supabase = await createClient();
-  const { data: accounts, error } = await supabase.from('cuentas').select('*');
-  if (error) throw error;
-  return accounts;
-}
 
 export default async function PrivatePage() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
-  const accounts = await getAccounts();
 
   return (
     <>
