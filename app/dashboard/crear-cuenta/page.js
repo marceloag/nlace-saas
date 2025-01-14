@@ -1,37 +1,3 @@
-// import { createClient } from '@/utils/supabase/server';
-// import Header from '@/components/Header';
-// import SideMenu from '@/components/SideMenu';
-
-// export async function getAccounts() {
-//   const supabase = await createClient();
-//   const { data: accounts, error } = await supabase.from('cuentas').select('*');
-//   if (error) throw error;
-//   return accounts;
-// }
-// export default async function PrivatePage() {
-//   const supabase = await createClient();
-//   const { data, error } = await supabase.auth.getUser();
-//   const accounts = await getAccounts();
-
-//   return (
-//     <section className="flex flex-row bg-gray-50">
-//       <SideMenu userData={data.user} />
-//       <main className="w-full flex flex-1 flex-col py-2 min-h-screen ">
-//         <Header cuentas={accounts} />
-//         <div className="flex flex-col my-6 mx-4 w-full justify-between h-[100%] relative">
-//           <div className="bg-transparent m-0 p-0 after:via-gray-50 after:via-40% w-full after:absolute after:w-full after:z-50 after:pb-10 after:bg-gradient-to-b after:flex  after:from-gray-50 after:to-transparent">
-//             {/* CONTENT HERE */}
-//             <h1 className="text-3xl font-thin">➕ Crear nueva cuenta</h1>
-//           </div>
-//           <div>
-//             <span className="text-xs text-gray-300"> V0.0.3</span>
-//           </div>
-//         </div>
-//       </main>
-//     </section>
-//   );
-// }
-
 'use client';
 
 import { useState } from 'react';
@@ -43,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { Toaster, toast } from 'sonner';
 
 export default function CrearCuentaForm() {
   const [tags, setTags] = useState([]);
@@ -56,10 +23,16 @@ export default function CrearCuentaForm() {
       formData.set('servicios', JSON.stringify(tags));
 
       const result = await createCuenta(formData);
+      const nombreCuenta = formData.get('nombre');
+
       if (result.success) {
-        router.push('/dashboard');
+        // router.push('/dashboard');
+        toast.success(`Se ha creado exitosamente la cuenta ${nombreCuenta} `);
+        document.getElementById('crearcuentaform').reset();
+        formData.delete('servicios');
+        setTags([]);
       } else {
-        alert('Error creando cuenta');
+        toast.error(`Ha ocurrido un error creando la cuenta ${nombreCuenta} `);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -85,11 +58,12 @@ export default function CrearCuentaForm() {
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
+      <Toaster position="bottom-center" richColors />
       <CardHeader>
         <CardTitle>⭐ Crear Nueva Cuenta</CardTitle>
       </CardHeader>
       <CardContent>
-        <form action={handleSubmit} className="space-y-6">
+        <form action={handleSubmit} className="space-y-6" id="crearcuentaform">
           <div className="space-y-2">
             <Input
               id="nombre"

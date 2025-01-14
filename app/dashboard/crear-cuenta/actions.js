@@ -50,7 +50,7 @@ export async function createCuenta(formData) {
 
     if (error) throw error;
 
-    revalidatePath('/dashboard');
+    // revalidatePath('/dashboard');
     return { success: true, data };
   } catch (error) {
     console.error('Error:', error);
