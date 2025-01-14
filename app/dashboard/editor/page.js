@@ -1,5 +1,11 @@
 import DatePicker from '@/components/DatePicker';
 import HourPicker from '@/components/HourPicker';
+import {
+  Facebook,
+  XTwitter,
+  Instagram,
+  LinkedIn
+} from '@/components/icons/Icons';
 
 function Editor() {
   const posts = [
@@ -40,17 +46,28 @@ function Editor() {
     }
   ];
   return (
-    <div className="bg-transparent m-0 p-0 after:via-gray-50 after:via-40% w-full xl:w-8/12 after:absolute after:w-full after:z-50 after:pb-10 after:bg-gradient-to-b after:flex  after:from-gray-50 after:to-transparent overflow-y-auto overscroll-contain max-h-[calc(100vh-150px)]">
+    <div className="bg-transparent m-0 p-0 after:via-gray-50 after:via-40% w-full xl:w-8/12 after:absolute after:w-full after:z-50 after:pb-10 after:bg-gradient-to-b after:flex  after:from-gray-50 after:to-transparent ">
       <h1 className="text-3xl font-thin">📝 Editar Posts</h1>
       {posts.map((post, index) => (
-        <div key={index} className="mb-2">
-          <div className="flex flex-col justify-center items-start px-8">
-            <textarea className="w-full h-auto min-h-20 resize-none p-4 opacity-70 focus:opacity-100 shadow-md focus:outline-none transition-all duration-300 ease-in-out border-solid border-[1px] border-gray-400 mt-4 outline-none focus:border-violet-950/70 focus:border-solid focus:border-[1px] rounded-lg text-gray-600">
+        <div
+          key={index}
+          className="mb-4 transition-all duration-300 ease-in-out"
+        >
+          <div className="flex flex-col justify-center items-start px-8 opacity-50 focus-within:opacity-100 transition-opacity duration-300">
+            <textarea className="group w-full h-auto min-h-20 resize-none p-4  shadow-md focus:outline-none transition-all duration-300 ease-in-out border-solid border-[1px] border-gray-400 mt-4 outline-none focus:border-violet-950/70 focus:border-solid focus:border-[1px] rounded-lg text-gray-600">
               {post.texto}
             </textarea>
-            <div className="py-2 flex flex-row items-center gap-4">
-              <DatePicker fecha_publicacion={post.fecha_publicacion} />
-              <HourPicker hora_publicacion={post.hora_publicacion} />
+            <div className="flex flex-row items-center justify-between w-full">
+              <div className="flex flex-row items-center gap-4">
+                <Facebook />
+                <XTwitter />
+                <Instagram />
+                <LinkedIn />
+              </div>
+              <div className="py-2 flex flex-row items-center gap-4">
+                <DatePicker fecha_publicacion={post.fecha_publicacion} />
+                <HourPicker hora_publicacion={post.hora_publicacion} />
+              </div>
             </div>
           </div>
         </div>

@@ -10,7 +10,8 @@ function Chat({ userId }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pauta, setPauta] = useState('');
-  const [loadingPauta, setLoadingPauta] = useState(true);
+  // TODO: Set to true to wait to load pauta
+  const [loadingPauta, setLoadingPauta] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [opacity, setOpacity] = useState('opacity-100');
   const { currentAccount } = useAccount();
@@ -28,8 +29,8 @@ function Chat({ userId }) {
         console.error('Failed to fetch pauta:', error);
       }
     };
-
-    fetchPauta();
+    // TODO: Uncomment this line to fetch pauta
+    // fetchPauta();
   }, []);
 
   const handleSubmit = async (e) => {

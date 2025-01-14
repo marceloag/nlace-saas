@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }) {
     <section className="flex flex-row bg-gray-50">
       <AccountProvider>
         <SideMenu userData={data.user} />
-        <main className="w-full flex flex-1 flex-col py-2 min-h-screen ">
+        <main className="flex flex-1 flex-col py-2 min-h-screen ml-14">
           <Header cuentas={accounts} />
           <div className="flex flex-col my-6 mx-4 w-full justify-between h-[100%] relative">
             {children}
