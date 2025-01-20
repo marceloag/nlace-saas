@@ -8,6 +8,12 @@ export async function createCuenta(formData) {
 
   try {
     const nombre = formData.get('nombre');
+    const slug = nombre
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
     const descripcion = formData.get('descripcion');
     const servicios = JSON.parse(formData.get('servicios'));
     const website = formData.get('website');
@@ -17,9 +23,15 @@ export async function createCuenta(formData) {
     const files = formData.getAll('files');
     const fileUrls = [];
 
+    const newFormData = new FormData();
+
+    files.forEach((file) => {
+      newFormData.append('files', file);
+    });
+
     for (const file of files) {
       if (file && file.size > 0) {
-        const fileName = `${Date.now()}-${file.name}`;
+        const fileName = `${slug}/${Date.now()}-${file.name}`;
         const { data, error } = await supabase.storage
           .from('kb-cuentas')
           .upload(fileName, file);
@@ -28,12 +40,7 @@ export async function createCuenta(formData) {
           throw new Error(`Error uploading file: ${error.message}`);
         }
 
-        // Get public URL for each file
-        const {
-          data: { publicUrl }
-        } = supabase.storage.from('kb-cuentas').getPublicUrl(fileName);
-
-        fileUrls.push(publicUrl);
+        fileUrls.push(fileName);
       }
     }
 
@@ -63,13 +70,30 @@ export async function createCuenta(formData) {
           descripcion,
           servicios,
           avatar: avatarUrl,
-          website
+          archivos: fileUrls,
+          website,
+          slug
         }
       ])
       .select()
       .single();
 
+    // Enviar archivos a n8n
+    const response = await fetch(
+      'https://n8n.marceloag.dev/webhook/recibir-archivos',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: newFormData
+      }
+    );
+
+    console.log('Response:', response);
+
     if (error) throw error;
+    revalidatePath('/dashboard/crear-cuenta');
     return { success: true, data };
   } catch (error) {
     console.error('Error:', error);

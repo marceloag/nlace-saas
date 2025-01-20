@@ -8,17 +8,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 
 import { Toaster, toast } from 'sonner';
 
-export default function CrearCuentaForm() {
+export default function CrearCuenta() {
   const [filesUploaded, setFilesUploaded] = useState([]);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [isPending, setIsPending] = useState(false);
-  const router = useRouter();
+
+  // Dropzone Settings
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       setFilesUploaded((prev) => [...prev, file]);
@@ -30,32 +30,7 @@ export default function CrearCuentaForm() {
       'text/pdf': ['.pdf']
     }
   });
-
-  const handleSubmit = async (formData) => {
-    setIsPending(true);
-    try {
-      formData.set('servicios', JSON.stringify(tags));
-
-      const result = await createCuenta(formData);
-      const nombreCuenta = formData.get('nombre');
-
-      if (result.success) {
-        // router.push('/dashboard');
-        toast.success(`Se ha creado exitosamente la cuenta ${nombreCuenta} `);
-        document.getElementById('crearcuentaform').reset();
-        formData.delete('servicios');
-        setTags([]);
-      } else {
-        toast.error(`Ha ocurrido un error creando la cuenta ${nombreCuenta} `);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error creando cuenta');
-    } finally {
-      setIsPending(false);
-    }
-  };
-
+  // Tags
   const handleAddTag = (e) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
@@ -65,25 +40,33 @@ export default function CrearCuentaForm() {
       setTagInput('');
     }
   };
-
-  // Handle Files Upload
-  const handleUpload = async () => {
-    const formData = new FormData();
-    filesUploaded.forEach((file) => {
-      formData.append('files', file);
-    });
-    console.log('FILES', formData.getAll('files'));
+  // Form Submit
+  const handleSubmit = async (formData) => {
+    setIsPending(true);
     try {
-      console.log('FormData', formData);
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
+      formData.set('servicios', JSON.stringify(tags));
+      filesUploaded.forEach((file) => {
+        formData.append('files', file);
       });
-      if (response.ok) {
-        console.log('Files uploaded');
+      const result = await createCuenta(formData);
+      const nombreCuenta = formData.get('nombre');
+      setIsPending(true);
+
+      if (result.success) {
+        // router.push('/dashboard');
+        setIsPending(false);
+        toast.success(`Se ha creado exitosamente la cuenta ${nombreCuenta} `);
+        document.getElementById('crearcuentaform').reset();
+        formData.delete('servicios');
+        setTags([]);
+        setFilesUploaded([]);
+      } else {
+        toast.error(`Ha ocurrido un error creando la cuenta ${nombreCuenta} `);
       }
     } catch (error) {
-      console.error('Error uploading files', error);
+      console.error('Error:', error);
+    } finally {
+      setIsPending(false);
     }
   };
 
