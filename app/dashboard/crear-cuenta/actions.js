@@ -12,10 +12,31 @@ export async function createCuenta(formData) {
     const servicios = JSON.parse(formData.get('servicios'));
     const website = formData.get('website');
     const avatarFile = formData.get('avatar');
-
     let avatarUrl = '';
+    // KB Files
+    const files = formData.getAll('files');
+    const fileUrls = [];
 
-    // Upload image if provided
+    for (const file of files) {
+      if (file && file.size > 0) {
+        const fileName = `${Date.now()}-${file.name}`;
+        const { data, error } = await supabase.storage
+          .from('kb-cuentas')
+          .upload(fileName, file);
+
+        if (error) {
+          throw new Error(`Error uploading file: ${error.message}`);
+        }
+
+        // Get public URL for each file
+        const {
+          data: { publicUrl }
+        } = supabase.storage.from('kb-cuentas').getPublicUrl(fileName);
+
+        fileUrls.push(publicUrl);
+      }
+    }
+
     if (avatarFile && avatarFile.size > 0) {
       const fileName = `${Date.now()}-${avatarFile.name}`;
       const { data, error } = await supabase.storage
@@ -49,8 +70,6 @@ export async function createCuenta(formData) {
       .single();
 
     if (error) throw error;
-
-    // revalidatePath('/dashboard');
     return { success: true, data };
   } catch (error) {
     console.error('Error:', error);
