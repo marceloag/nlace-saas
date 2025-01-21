@@ -7,6 +7,7 @@ export async function createCuenta(formData) {
   const supabase = await createClient();
 
   try {
+    let avatarUrl = '';
     const nombre = formData.get('nombre');
     const slug = nombre
       .toLowerCase()
@@ -18,20 +19,17 @@ export async function createCuenta(formData) {
     const servicios = JSON.parse(formData.get('servicios'));
     const website = formData.get('website');
     const avatarFile = formData.get('avatar');
-    let avatarUrl = '';
+
     // KB Files
     const files = formData.getAll('files');
     const fileUrls = [];
 
-    const newFormData = new FormData();
-
-    files.forEach((file) => {
-      newFormData.append('files', file);
-    });
-
     for (const file of files) {
       if (file && file.size > 0) {
+        // TODO: Chequear Acentos y ñ
+
         const fileName = `${slug}/${Date.now()}-${file.name}`;
+        // Upload File to Supabase Storage
         const { data, error } = await supabase.storage
           .from('kb-cuentas')
           .upload(fileName, file);
@@ -39,7 +37,6 @@ export async function createCuenta(formData) {
         if (error) {
           throw new Error(`Error uploading file: ${error.message}`);
         }
-
         fileUrls.push(fileName);
       }
     }
@@ -53,16 +50,14 @@ export async function createCuenta(formData) {
       if (error) {
         throw new Error(`Error uploading file: ${error.message}`);
       }
-
       // Get public URL
       const {
         data: { publicUrl }
       } = supabase.storage.from('avatars').getPublicUrl(fileName);
-
       avatarUrl = publicUrl;
     }
 
-    const { data, error } = await supabase
+    const { data: dataCuenta, error } = await supabase
       .from('cuentas')
       .insert([
         {
@@ -78,23 +73,35 @@ export async function createCuenta(formData) {
       .select()
       .single();
 
-    // Enviar archivos a n8n
-    const response = await fetch(
-      'https://n8n.marceloag.dev/webhook/recibir-archivos',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: newFormData
-      }
-    );
-
-    console.log('Response:', response);
-
     if (error) throw error;
+
+    // Insertar archivos en tabla archivos-kb
+
+    for (const file of fileUrls) {
+      // TODO: Get file signed url for download
+
+      const { data: dataSignedUrl, error: errorSigned } = await supabase.storage
+        .from('kb-cuentas')
+        .createSignedUrl(file, 3600);
+
+      if (errorSigned) throw errorSigned;
+
+      const { error: archivosError } = await supabase
+        .from('archivos-kb')
+        .insert([
+          {
+            nombre_archivo: file,
+            signed_url: dataSignedUrl.signedUrl,
+            cuenta: dataCuenta.id,
+            bucket: 'kb-cuentas',
+            status: 'pending'
+          }
+        ]);
+      if (archivosError) throw archivosError;
+    }
+
     revalidatePath('/dashboard/crear-cuenta');
-    return { success: true, data };
+    return { success: true, dataCuenta };
   } catch (error) {
     console.error('Error:', error);
     return { success: false, error: 'Error creando cuenta' };
