@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model archivos_kb {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  nombre_archivo String?  @default("") @db.VarChar
+  bucket         String?  @default("") @db.VarChar
+  status         String?  @default("") @db.VarChar
+  cuenta         BigInt?
+  signed_url     String?  @default("")
+  cuentas        cuentas? @relation(fields: [cuenta], references: [id], onDelete: Cascade)
+
+  @@map("archivos-kb")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model cuentas {
+  id            BigInt        @id @default(autoincrement())
+  created_at    DateTime      @default(now()) @db.Timestamptz(6)
+  nombre        String?       @default("")
+  descripcion   String?
+  servicios     Json?
+  configuracion Json?
+  avatar        String?
+  website       String?
+  archivos      String[]      @default([])
+  slug          String?       @db.VarChar
+  archivos_kb   archivos_kb[]
+}
+
+model langchain_chat_histories {
+  id         Int    @id @default(autoincrement())
+  session_id String @db.VarChar(255)
+  message    Json
+}
+
+model n8n_chat_histories {
+  id         Int    @id @default(autoincrement())
+  session_id String @db.VarChar(255)
+  message    Json
+}
