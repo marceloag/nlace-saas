@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,12 +22,19 @@ import {
 import { useAccount } from '@/context/AccountContext';
 
 export default function AccountSwitcher({ accounts }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
-  const { setCurrentAccount } = useAccount();
+
+  const { setCurrentAccount, setAllAccounts } = useAccount();
+
+  useEffect(() => {
+    router.push(`/dashboard/${selectedAccount.id}`);
+  }, [selectedAccount]);
 
   useEffect(() => {
     setCurrentAccount(accounts[0]);
+    setAllAccounts(accounts);
   }, [accounts]);
 
   return (

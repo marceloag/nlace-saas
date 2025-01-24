@@ -6,16 +6,17 @@ const AccountContext = createContext();
 export function AccountProvider({ children }) {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [currentAccount, setCurrentAccount] = useState(null);
-  const variableContext = 'hola soy la variable';
+  const [allAccounts, setAllAccounts] = useState(null);
 
   return (
     <AccountContext.Provider
       value={{
         selectedAccount,
         setSelectedAccount,
-        variableContext,
         currentAccount,
-        setCurrentAccount
+        setCurrentAccount,
+        allAccounts,
+        setAllAccounts
       }}
     >
       {children}
