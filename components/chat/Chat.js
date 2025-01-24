@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { generarPauta, sendMessage } from './actions';
 import Loading from '../ui/Loading';
 import Markdown from 'react-markdown';
@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { useAccount } from '@/context/AccountContext';
 
 function Chat({ userId }) {
+  const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pauta, setPauta] = useState('');
@@ -14,9 +15,11 @@ function Chat({ userId }) {
   const [loadingPauta, setLoadingPauta] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [opacity, setOpacity] = useState('opacity-100');
-  const { currentAccount } = useAccount();
+  const { currentAccount, selectedAccount } = useAccount();
 
   useEffect(() => {
+    // console.log(currentAccount);
+    console.log(currentAccount);
     const fetchPauta = async () => {
       try {
         const response = await generarPauta();
@@ -31,7 +34,11 @@ function Chat({ userId }) {
     };
     // TODO: Uncomment this line to fetch pauta
     // fetchPauta();
-  }, []);
+  }, [currentAccount]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +94,7 @@ function Chat({ userId }) {
       )}
       <div
         id="mensajes"
-        className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-300px)]"
+        className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7"
       >
         {messages && messages.length === 0 && (
           <div className="flex flex-row items-center justify-center h-auto mb-10 gap-6">
@@ -121,7 +128,7 @@ function Chat({ userId }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             key={message.id}
-            className={`flex flex-col items-start ${
+            className={`relative flex flex-col items-start ${
               message.role === 'user' ? 'items-end' : ''
             }`}
           >
@@ -137,6 +144,11 @@ function Chat({ userId }) {
             <div className="text-xs text-gray-400 px-4">
               {message.timestamp.toLocaleTimeString()}
             </div>
+            {message.role === 'user' && (
+              <div className="w-8 h-8 rounded-full overflow-hidden border-white border-2 bg-gray-500 absolute -top-2">
+                <img src={currentAccount.avatar} alt="Avatar" />
+              </div>
+            )}
           </motion.div>
         ))}
         {isLoading && (
@@ -151,6 +163,7 @@ function Chat({ userId }) {
             </div>
           </motion.div>
         )}
+        <div ref={messagesEndRef}></div>
       </div>
       <div className="rounded-2xl p-[1px] bg-gradient-to-br from-[#ffc4f9] to-[#95a9fc] w-1/2 mx-auto transition-all duration-300 opacity-90 ease-in-out">
         <div className="relative">
