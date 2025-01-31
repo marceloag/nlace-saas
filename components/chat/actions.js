@@ -1,12 +1,26 @@
 'use server';
 
-export async function sendMessage(prompt, pauta, userId) {
+export async function sendMessage(
+  prompt,
+  pauta,
+  userId,
+  accountId,
+  accountName,
+  accountDesc
+) {
   const response = await fetch('https://n8n.marceloag.dev/webhook/chat-nlace', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ prompt, pauta, userId })
+    body: JSON.stringify({
+      prompt,
+      pauta,
+      userId,
+      accountId,
+      accountName,
+      accountDesc
+    })
   });
   const result = await response.json();
   console.log(result);

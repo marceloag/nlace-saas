@@ -1,4 +1,6 @@
 'use client';
+// TODO: Message history
+// TODO: Bug on avatar image on switching accounts
 import { useEffect, useState, useRef } from 'react';
 import { generarPauta, sendMessage } from './actions';
 import Loading from '../ui/Loading';
@@ -57,7 +59,14 @@ function Chat({ userId, accountId }) {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(prompt.trim(), pauta, userId);
+      const response = await sendMessage(
+        prompt.trim(),
+        pauta,
+        userId,
+        currentAccount.id,
+        currentAccount.nombre,
+        currentAccount.descripcion
+      );
       const systemMessage = {
         id: (Date.now() + 1).toString(),
         content: response.message,

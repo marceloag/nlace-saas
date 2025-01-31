@@ -34,7 +34,7 @@ model cuentas {
   avatar        String?
   website       String?
   archivos      String[]      @default([])
-  slug          String?       @db.VarChar
+  slug          String?       @unique @db.VarChar
   archivos_kb   archivos_kb[]
 }
 

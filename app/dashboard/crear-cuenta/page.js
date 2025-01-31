@@ -9,14 +9,16 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDropzone } from 'react-dropzone';
+import Loading from '@/components/ui/Loading';
 
 import { Toaster, toast } from 'sonner';
+import { is } from 'date-fns/locale';
 
 export default function CrearCuenta() {
   const [filesUploaded, setFilesUploaded] = useState([]);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
-  const [isPending, setIsPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Dropzone Settings
   const onDrop = useCallback((acceptedFiles) => {
@@ -42,7 +44,7 @@ export default function CrearCuenta() {
   };
   // Form Submit
   const handleSubmit = async (formData) => {
-    setIsPending(true);
+    setIsLoading(true);
     try {
       formData.set('servicios', JSON.stringify(tags));
       filesUploaded.forEach((file) => {
@@ -50,11 +52,8 @@ export default function CrearCuenta() {
       });
       const result = await createCuenta(formData);
       const nombreCuenta = formData.get('nombre');
-      setIsPending(true);
 
       if (result.success) {
-        // router.push('/dashboard');
-        setIsPending(false);
         toast.success(`Se ha creado exitosamente la cuenta ${nombreCuenta} `);
         document.getElementById('crearcuentaform').reset();
         formData.delete('servicios');
@@ -66,7 +65,7 @@ export default function CrearCuenta() {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setIsPending(false);
+      setIsLoading(false);
     }
   };
 
@@ -78,7 +77,7 @@ export default function CrearCuenta() {
     <Card className="w-full max-w-2xl mx-auto">
       <Toaster position="bottom-center" richColors />
       <CardHeader>
-        <CardTitle>⭐ Crear Nueva Cuenta</CardTitle>
+        <CardTitle>⭐ Crear Nueva Cuenta {isLoading}</CardTitle>
       </CardHeader>
       <CardContent>
         <form action={handleSubmit} className="space-y-6" id="crearcuentaform">
@@ -205,8 +204,8 @@ export default function CrearCuenta() {
             )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Creando...' : 'Crear Cuenta'}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? 'Creando...' : 'Crear Cuenta'}
           </Button>
         </form>
       </CardContent>
