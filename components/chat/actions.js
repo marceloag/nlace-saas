@@ -28,7 +28,8 @@ export async function sendMessage(
   // console.log(result);
   saveMessageSB(result.answer, 'ai', accountId, userId);
   return {
-    message: result.answer
+    message: result.answer,
+    posts: result.posts || []
   };
 }
 

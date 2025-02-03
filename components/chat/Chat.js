@@ -2,6 +2,7 @@
 // TODO: Message history
 // TODO: Bug on avatar image on switching accounts
 import { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 import { sendMessage, getMessages, saveMessageSB } from './actions';
 import Loading from '../ui/Loading';
 import Markdown from 'react-markdown';
@@ -86,7 +87,8 @@ function Chat({ userId }) {
         id: (Date.now() + 1).toString(),
         content: response.message,
         role: 'system',
-        timestamp: new Date()
+        timestamp: new Date(),
+        posts: response.posts || []
       };
       setMessages((prev) => [...prev, systemMessage]);
     } catch (error) {
@@ -141,6 +143,20 @@ function Chat({ userId }) {
                 }`}
               >
                 <Markdown>{message.content}</Markdown>
+                {message.posts && message.posts.length > 0 && (
+                  <div className="flex flex-row items-center justify-start gap-2 mt-2">
+                    <Link
+                      href={{
+                        pathname: '/dashboard/editor',
+                        query: { posts: JSON.stringify(message.posts) }
+                      }}
+                    >
+                      <span className="text-xs text-gray-400">
+                        Editar Posts
+                      </span>
+                    </Link>
+                  </div>
+                )}
               </div>
               <div className="text-xs text-gray-400 px-4">
                 {message.timestamp.toLocaleTimeString()}

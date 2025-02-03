@@ -215,9 +215,9 @@ export const AccountsIcon = () => (
   >
     <g
       fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
       stroke="currentColor"
     >
       <path d="M18 21a8 8 0 0 0-16 0"></path>
