@@ -7,6 +7,12 @@ import Loading from '../ui/Loading';
 import Markdown from 'react-markdown';
 import { motion } from 'motion/react';
 import { useAccount } from '@/context/AccountContext';
+import {
+  CommandIcon,
+  EnterIcon,
+  SendIcon,
+  CalendarIcon
+} from '@/components/icons/Icons';
 
 function Chat({ userId }) {
   const messagesEndRef = useRef(null);
@@ -93,11 +99,11 @@ function Chat({ userId }) {
 
   return (
     <>
-      <div className="bg-transparent m-0 p-0 after:via-gray-50 after:via-40% w-full after:absolute after:w-full after:z-50 after:pb-10 after:bg-gradient-to-b after:flex  after:from-gray-50 after:to-transparent">
+      <header className="bg-transparent m-0 p-0 after:via-gray-50 after:via-40% w-full after:absolute after:w-full after:z-50 after:pb-10 after:bg-gradient-to-b after:flex  after:from-gray-50 after:to-transparent">
         <h1 className="text-3xl font-thin">
           👋 Bienvenido al agente de : {currentAccount?.nombre}
         </h1>
-      </div>
+      </header>
 
       <main className="w-full max-w-10/12 flex flex-col">
         <div
@@ -113,19 +119,6 @@ function Chat({ userId }) {
                 Sugerencias de contenido y palabras clave
               </div>
               <div className="flex flex-row w-1/3 p-4 drop-shadow-sm rounded-lg bg-gradient-to-b from-violet-300/10 to-pink-200/20 font-light text-gray-500 items-center justify-center gap-4 text-sm border-b-8 border-b-solid border-b-violet-300/40 cursor-pointer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="48"
-                  height="48"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  stroke="currentColor"
-                >
-                  <path d="M16.5 5V3m-9 2V3M3.25 8h17.5M3 10.044c0-2.115 0-3.173.436-3.981a3.896 3.896 0 0 1 1.748-1.651C6.04 4 7.16 4 9.4 4h5.2c2.24 0 3.36 0 4.216.412.753.362 1.364.94 1.748 1.65.436.81.436 1.868.436 3.983v4.912c0 2.115 0 3.173-.436 3.981a3.896 3.896 0 0 1-1.748 1.651C17.96 21 16.84 21 14.6 21H9.4c-2.24 0-3.36 0-4.216-.412a3.896 3.896 0 0 1-1.748-1.65C3 18.128 3 17.07 3 14.955z" />
-                </svg>
                 Generación de pautas, calendarios y contenido
               </div>
             </div>
@@ -186,50 +179,13 @@ function Chat({ userId }) {
               className="flex flex-col items-center justify-center bg-gradient-to-br from-[#ffc4f9] to-[#95a9fc] absolute w-10 h-10 text-white z-10 right-2 top-5 rounded-full cursor-pointer"
               onClick={handleSubmit}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1.5em"
-                height="1.5em"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill="currentColor"
-                  d="M5 6.5L7.5 4h.7l2.5 2.5l-.7.71l-1.65-1.64v5.57h-1V5.57L5.7 7.22z"
-                ></path>
-              </svg>
+              <SendIcon />
             </a>
           </div>
         </div>
         <small className="text-center mt-1 text-gray-500 flex flex-row items-center justify-center gap-1">
           Presiona
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            height="1em"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="#888888"
-              d="M17.5 3C15.57 3 14 4.57 14 6.5V8h-4V6.5C10 4.57 8.43 3 6.5 3S3 4.57 3 6.5S4.57 10 6.5 10H8v4H6.5C4.57 14 3 15.57 3 17.5S4.57 21 6.5 21s3.5-1.57 3.5-3.5V16h4v1.5c0 1.93 1.57 3.5 3.5 3.5s3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5H16v-4h1.5c1.93 0 3.5-1.57 3.5-3.5S19.43 3 17.5 3M16 8V6.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S18.33 8 17.5 8zM6.5 8C5.67 8 5 7.33 5 6.5S5.67 5 6.5 5S8 5.67 8 6.5V8zm3.5 6v-4h4v4zm7.5 5c-.83 0-1.5-.67-1.5-1.5V16h1.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5m-11 0c-.83 0-1.5-.67-1.5-1.5S5.67 16 6.5 16H8v1.5c0 .83-.67 1.5-1.5 1.5"
-            ></path>
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            height="1em"
-            viewBox="0 0 14 14"
-          >
-            <g
-              fill="none"
-              stroke="#888888"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect width="13" height="13" x=".5" y=".5" rx="1"></rect>
-              <path d="m5.5 10.5l-2-2l2-2"></path>
-              <path d="M3.5 8.5h5a1 1 0 0 0 1-1v-3"></path>
-            </g>
-          </svg>
+          <CommandIcon /> <EnterIcon />
           para enviar
         </small>
       </main>
