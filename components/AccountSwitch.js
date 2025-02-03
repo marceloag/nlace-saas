@@ -28,10 +28,6 @@ export default function AccountSwitcher({ accounts, className }) {
 
   const { setCurrentAccount, setAllAccounts } = useAccount();
 
-  // useEffect(() => {
-  //   router.push(`/dashboard/${selectedAccount.id}`);
-  // }, [selectedAccount]);
-
   useEffect(() => {
     setCurrentAccount(accounts[0]);
     setAllAccounts(accounts);

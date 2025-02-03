@@ -14,13 +14,12 @@ function Chat({ userId }) {
   const [isLoading, setIsLoading] = useState(false);
   const [pauta, setPauta] = useState('');
   // TODO: Set to true to wait to load pauta
-  const [loadingPauta, setLoadingPauta] = useState(false);
   const [prompt, setPrompt] = useState('');
-  const [opacity, setOpacity] = useState('opacity-100');
   const { currentAccount } = useAccount();
   const avatar = currentAccount?.avatar;
 
   useEffect(() => {
+    setMessages([]);
     const fetchMessages = async () => {
       try {
         const messagesSB = await getMessages(userId, currentAccount?.id);
@@ -101,24 +100,6 @@ function Chat({ userId }) {
       </div>
 
       <main className="w-full max-w-10/12 flex flex-col">
-        {loadingPauta && (
-          <div
-            className={`absolute top-0 left-0 w-full h-full grid place-items-center bg-gray-50 z-50 ${opacity} transition-all duration-500 ease-in-out`}
-          >
-            <div className="card">
-              <div className="loader">
-                <p>Estamos cargando</p>
-                <div className="words">
-                  <span className="word font-bold">tendencias</span>
-                  <span className="word font-bold">marcas</span>
-                  <span className="word font-bold">keywords</span>
-                  <span className="word font-bold">emojis</span>
-                  <span className="word font-bold">a la IA</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
         <div
           id="mensajes"
           className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7"
