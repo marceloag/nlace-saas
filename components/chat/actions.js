@@ -27,7 +27,7 @@ export async function sendMessage(
   const result = await response.json();
   // console.log(result);
   // TODO: save result.posts to supabase
-  saveMessageSB(result.answer, 'ai', accountId, userId);
+  saveMessageSB(result.answer, 'ai', accountId, userId, result.posts);
   return {
     message: result.answer,
     posts: result.posts || []
@@ -79,10 +79,10 @@ export async function getMessages(userId, accountId) {
   }
 }
 
-export async function saveMessageSB(content, role, accountId, userId) {
+export async function saveMessageSB(content, role, accountId, userId, posts) {
   const { data, error } = await supabase
     .from('mensajes_chat')
-    .insert({ content, role, account_id: accountId, user_id: userId });
+    .insert({ content, role, account_id: accountId, user_id: userId, posts });
   if (error) throw error;
   return data;
 }

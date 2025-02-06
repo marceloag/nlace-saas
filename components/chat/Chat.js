@@ -1,6 +1,5 @@
 'use client';
-// TODO: Message history
-// TODO: Bug on avatar image on switching accounts
+
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { sendMessage, getMessages, saveMessageSB } from './actions';
@@ -20,7 +19,6 @@ function Chat({ userId }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pauta, setPauta] = useState('');
-  // TODO: Set to true to wait to load pauta
   const [prompt, setPrompt] = useState('');
   const { currentAccount } = useAccount();
   const avatar = currentAccount?.avatar;
