@@ -207,36 +207,40 @@ export const CalendarIcon = () => (
 );
 
 export const DashboardIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    viewBox="0 0 24 24"
-    fill="none"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    stroke="currentColor"
-  >
-    <path d="M6.133 21C4.955 21 4 20.02 4 18.81v-8.802c0-.665.295-1.295.8-1.71l5.867-4.818a2.09 2.09 0 0 1 2.666 0l5.866 4.818c.506.415.801 1.045.801 1.71v8.802c0 1.21-.955 2.19-2.133 2.19z" />
-    <path d="M9 16c.85.63 1.885 1 3 1s2.15-.37 3-1m-5.5-4.5V11m5 .5V11" />
-  </svg>
+  <div className="cursor-pointer">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      stroke="currentColor"
+    >
+      <path d="M6.133 21C4.955 21 4 20.02 4 18.81v-8.802c0-.665.295-1.295.8-1.71l5.867-4.818a2.09 2.09 0 0 1 2.666 0l5.866 4.818c.506.415.801 1.045.801 1.71v8.802c0 1.21-.955 2.19-2.133 2.19z" />
+      <path d="M9 16c.85.63 1.885 1 3 1s2.15-.37 3-1m-5.5-4.5V11m5 .5V11" />
+    </svg>
+  </div>
 );
 
 export const AddAccountIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    viewBox="0 0 24 24"
-    fill="none"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    stroke="currentColor"
-  >
-    <path d="M3 9v10.4c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C3.76 21 4.04 21 4.598 21H15m-1-8v-3m0 0V7m0 3h-3m3 0h3M7 13.8V6.2c0-1.12 0-1.68.218-2.108.192-.377.497-.682.874-.874C8.52 3 9.08 3 10.2 3h7.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C21 4.52 21 5.08 21 6.2v7.6c0 1.12 0 1.68-.218 2.108a2.001 2.001 0 0 1-.874.874c-.428.218-.986.218-2.104.218h-7.607c-1.118 0-1.678 0-2.105-.218a2 2 0 0 1-.874-.874C7 15.48 7 14.92 7 13.8" />
-  </svg>
+  <div className="cursor-pointer">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      stroke="currentColor"
+    >
+      <path d="M3 9v10.4c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C3.76 21 4.04 21 4.598 21H15m-1-8v-3m0 0V7m0 3h-3m3 0h3M7 13.8V6.2c0-1.12 0-1.68.218-2.108.192-.377.497-.682.874-.874C8.52 3 9.08 3 10.2 3h7.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C21 4.52 21 5.08 21 6.2v7.6c0 1.12 0 1.68-.218 2.108a2.001 2.001 0 0 1-.874.874c-.428.218-.986.218-2.104.218h-7.607c-1.118 0-1.678 0-2.105-.218a2 2 0 0 1-.874-.874C7 15.48 7 14.92 7 13.8" />
+    </svg>
+  </div>
 );
 
 export const ConfigurationIcon = () => (

@@ -52,13 +52,15 @@ export async function generarPauta() {
 }
 
 export async function getMessages(userId, accountId) {
-  if (accountId && accountId != 1) {
+  if (accountId) {
     const session_id = `${userId}+${accountId}`;
     const { data: mensajes, error } = await supabase
       .from('mensajes_chat')
       .select('*')
       .eq('account_id', accountId)
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .limit(6)
+      .order('timestamp', { ascending: true });
     if (error) throw error;
     const formattedMessages = mensajes.map((mensaje) => {
       return {
