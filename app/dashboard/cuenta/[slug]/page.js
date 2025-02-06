@@ -31,7 +31,7 @@ export default async function PerfilCuenta({ params }) {
           {data.servicios.map((servicio) => (
             <span
               key={servicio}
-              className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary mr-2"
+              className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary mr-2 mb-2"
             >
               {servicio}
             </span>

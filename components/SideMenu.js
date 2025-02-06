@@ -61,7 +61,7 @@ function SideMenu({ userData }) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Link href="/cuentas">
+              <Link href="/dashboard/cuentas">
                 <AccountsIcon />
               </Link>
             </TooltipTrigger>
@@ -71,7 +71,7 @@ function SideMenu({ userData }) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Link href="/configuracion">
+              <Link href="/dashboard/configuracion">
                 <ConfigurationIcon />
               </Link>
             </TooltipTrigger>

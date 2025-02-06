@@ -12,7 +12,7 @@ import {
   CommandIcon,
   EnterIcon,
   SendIcon,
-  CalendarIcon
+  EditIcon
 } from '@/components/icons/Icons';
 
 function Chat({ userId }) {
@@ -41,7 +41,7 @@ function Chat({ userId }) {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   const handleCommandEnter = (e) => {
     if (e.key === 'Enter' && e.metaKey) {
@@ -136,7 +136,7 @@ function Chat({ userId }) {
               }`}
             >
               <div
-                className={`mensajecontent bg-white rounded-2xl p-4 m-2 drop-shadow-sm ${
+                className={`max-w-[60%] mensajecontent bg-white rounded-2xl p-4 m-2 drop-shadow-sm ${
                   message.role === 'user'
                     ? 'bg-gradient-to-br from-[#ffc4f9] to-[#95a9fc] text-white'
                     : 'text-gray-700 max-w-[60%]'
@@ -151,7 +151,8 @@ function Chat({ userId }) {
                         query: { posts: JSON.stringify(message.posts) }
                       }}
                     >
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-400 flex flex-row items-center gap-1 cursor-pointer">
+                        <EditIcon />
                         Editar Posts
                       </span>
                     </Link>
