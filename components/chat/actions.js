@@ -26,6 +26,7 @@ export async function sendMessage(
   });
   const result = await response.json();
   // console.log(result);
+  // TODO: save result.posts to supabase
   saveMessageSB(result.answer, 'ai', accountId, userId);
   return {
     message: result.answer,
@@ -68,7 +69,8 @@ export async function getMessages(userId, accountId) {
         content: mensaje.content,
         role: mensaje.role,
         timestamp: new Date(mensaje.timestamp),
-        accountId: mensaje.account_id
+        accountId: mensaje.account_id,
+        posts: mensaje.posts || []
       };
     });
     return formattedMessages;
