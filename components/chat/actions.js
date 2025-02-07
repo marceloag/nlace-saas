@@ -61,7 +61,7 @@ export async function getMessages(userId, accountId) {
       .eq('account_id', accountId)
       .eq('user_id', userId)
       .limit(6)
-      .order('timestamp', { ascending: true });
+      .order('timestamp', { ascending: false });
     if (error) throw error;
     const formattedMessages = mensajes.map((mensaje) => {
       return {
@@ -73,7 +73,7 @@ export async function getMessages(userId, accountId) {
         posts: mensaje.posts || []
       };
     });
-    return formattedMessages;
+    return formattedMessages.reverse();
   } else {
     return [];
   }
