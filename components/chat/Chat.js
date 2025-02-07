@@ -48,7 +48,7 @@ function Chat({ userId }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!prompt.trim()) return;
     const userMessage = {
       id: Date.now().toString(),
       content: prompt.trim(),
