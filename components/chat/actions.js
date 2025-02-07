@@ -8,7 +8,8 @@ export async function sendMessage(
   userId,
   accountId,
   accountName,
-  accountDesc
+  accountDesc,
+  promptAgente
 ) {
   const response = await fetch('https://n8n.marceloag.dev/webhook/chat-nlace', {
     method: 'POST',
@@ -21,12 +22,12 @@ export async function sendMessage(
       userId,
       accountId,
       accountName,
-      accountDesc
+      accountDesc,
+      promptAgente
     })
   });
   const result = await response.json();
   // console.log(result);
-  // TODO: save result.posts to supabase
   saveMessageSB(result.answer, 'ai', accountId, userId, result.posts);
   return {
     message: result.answer,

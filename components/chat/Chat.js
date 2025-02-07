@@ -22,8 +22,12 @@ function Chat({ userId }) {
   const [prompt, setPrompt] = useState('');
   const { currentAccount } = useAccount();
   const avatar = currentAccount?.avatar;
+  const prevAccountRef = useRef();
 
   useEffect(() => {
+    if (prevAccountRef.current?.id === currentAccount?.id) {
+      return;
+    }
     setMessages([]);
     const fetchMessages = async () => {
       try {
@@ -34,7 +38,9 @@ function Chat({ userId }) {
         console.error('Failed to fetch messages:', error);
       }
     };
+    console.log(currentAccount);
     fetchMessages();
+    prevAccountRef.current = currentAccount;
   }, [currentAccount]);
 
   useEffect(() => {
@@ -79,7 +85,8 @@ function Chat({ userId }) {
         userId,
         currentAccount.id,
         currentAccount.nombre,
-        currentAccount.descripcion
+        currentAccount.descripcion,
+        currentAccount.prompt_agente
       );
       const systemMessage = {
         id: (Date.now() + 1).toString(),
