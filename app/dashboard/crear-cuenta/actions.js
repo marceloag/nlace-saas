@@ -3,8 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 
-export const maxDuration = 30;
-
 export async function createCuenta(formData) {
   const supabase = await createClient();
 
@@ -115,3 +113,5 @@ export async function createCuenta(formData) {
     return { success: false, error: 'Error creando cuenta' };
   }
 }
+
+createCuenta.maxDuration = 30;

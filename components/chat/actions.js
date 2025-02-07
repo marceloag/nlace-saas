@@ -1,7 +1,6 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 const supabase = await createClient();
-export const maxDuration = 20;
 
 export async function sendMessage(
   prompt,
@@ -35,6 +34,8 @@ export async function sendMessage(
     posts: result.posts || []
   };
 }
+
+sendMessage.maxDuration = 30;
 
 export async function generarPauta() {
   const response = await fetch(
