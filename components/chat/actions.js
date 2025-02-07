@@ -1,6 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 const supabase = await createClient();
+export const maxDuration = 20;
 
 export async function sendMessage(
   prompt,
