@@ -106,7 +106,7 @@ export async function createCuenta(formData) {
       if (archivosError) throw archivosError;
     }
 
-    //revalidatePath('/dashboard/crear-cuenta');
+    revalidatePath('/dashboard/crear-cuenta');
     return { success: true, dataCuenta };
   } catch (error) {
     console.error('Error:', error);
