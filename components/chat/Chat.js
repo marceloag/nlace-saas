@@ -115,7 +115,7 @@ function Chat({ userId }) {
       <main className="w-full max-w-10/12 flex flex-col">
         <div
           id="mensajes"
-          className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7"
+          className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7 no-scrollbar"
         >
           {messages && messages.length === 0 && (
             <div className="flex flex-row items-center justify-center h-auto mb-10 gap-6">
