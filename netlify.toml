@@ -1,3 +1,2 @@
 [functions]
-  maxRequestBodySize = "50mb"  # Ajusta según tus necesidades
-  timeout = 30 
+timeout = 30 
