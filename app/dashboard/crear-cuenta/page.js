@@ -96,7 +96,17 @@ export default function CrearCuenta() {
               name="descripcion"
               required
               placeholder="Descripción de la cuenta"
-              className="min-h-[100px]"
+              className="min-h-[60px]"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Textarea
+              id="promptAgente"
+              name="promptAgente"
+              required
+              placeholder="Prompt Agente"
+              className="min-h-[200px]"
             />
           </div>
 

@@ -19,6 +19,7 @@ export async function createCuenta(formData) {
     const servicios = JSON.parse(formData.get('servicios'));
     const website = formData.get('website');
     const avatarFile = formData.get('avatar');
+    const promptAgente = formData.get('promptAgente');
 
     // KB Files
     const files = formData.getAll('files');
@@ -26,10 +27,12 @@ export async function createCuenta(formData) {
 
     for (const file of files) {
       if (file && file.size > 0) {
-        // TODO: Chequear Acentos y ñ
+        const cleanFileName = file.name
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
+        const fileName = `${slug}/${Date.now()}-${cleanFileName}`;
 
-        const fileName = `${slug}/${Date.now()}-${file.name}`;
-        // Upload File to Supabase Storage
         const { data, error } = await supabase.storage
           .from('kb-cuentas')
           .upload(fileName, file);
@@ -42,7 +45,11 @@ export async function createCuenta(formData) {
     }
 
     if (avatarFile && avatarFile.size > 0) {
-      const fileName = `${Date.now()}-${avatarFile.name}`;
+      const cleanFileNameAvatar = avatarFile.name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
+      const fileName = `${Date.now()}-${cleanFileNameAvatar}`;
       const { data, error } = await supabase.storage
         .from('avatars')
         .upload(fileName, avatarFile);
@@ -67,7 +74,8 @@ export async function createCuenta(formData) {
           avatar: avatarUrl,
           archivos: fileUrls,
           website,
-          slug
+          slug,
+          prompt_agente: promptAgente
         }
       ])
       .select()
@@ -78,8 +86,6 @@ export async function createCuenta(formData) {
     // Insertar archivos en tabla archivos-kb
 
     for (const file of fileUrls) {
-      // TODO: Get file signed url for download
-
       const { data: dataSignedUrl, error: errorSigned } = await supabase.storage
         .from('kb-cuentas')
         .createSignedUrl(file, 3600);
