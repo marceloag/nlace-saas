@@ -1,6 +1,9 @@
 import { createClient } from '@/utils/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DownloadFileButton from '@/components/DownloadFileButton';
+import FileUploader from '@/components/fileUpload/fileUploader';
+import { Button } from '@/components/ui/button';
+import Markdown from 'react-markdown';
 
 export default async function PerfilCuenta({ params }) {
   const supabase = await createClient();
@@ -38,6 +41,7 @@ export default async function PerfilCuenta({ params }) {
           ))}
         </div>
         <div className="flex flex-col gap-2">
+          <FileUploader />
           <h1 className="text-2xl font-extrabold my-4">Archivos</h1>
           <div>
             {data.archivos.map((file) => (
@@ -49,6 +53,12 @@ export default async function PerfilCuenta({ params }) {
                 <DownloadFileButton file={file} />
               </div>
             ))}
+          </div>
+        </div>
+        <div>
+          <h1 className="text-2xl font-extrabold my-4">System Prompt</h1>
+          <div id="system-prompt" className="text-gray-700">
+            <Markdown>{data.prompt_agente}</Markdown>
           </div>
         </div>
       </CardContent>

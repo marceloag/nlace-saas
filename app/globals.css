@@ -229,3 +229,22 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+#system-prompt h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+#system-prompt p {
+  margin-bottom: 1rem;
+}
+
+#system-prompt ul {
+  margin-bottom: 1rem;
+}
+
+#system-prompt ul li {
+  list-style: disc;
+  margin-left: 2em;
+}
