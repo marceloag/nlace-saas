@@ -1,14 +1,39 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
-import { uploadFiles } from '@/app/dashboard/cuentas/actions';
+import { createClient } from '@supabase/supabase-js';
 
-function FileUploader() {
+function FileUploader({ accountSlug, accessToken }) {
   const [filesUploaded, setFilesUploaded] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      global: { headers: { Authorization: `Bearer ${accessToken}` } }
+    }
+  );
+
+  async function uploadToSupabase(file) {
+    const cleanFileName = file.name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
+    const fileName = `${accountSlug}/${Date.now()}-${cleanFileName}`;
+
+    const { data, error } = await supabase.storage
+      .from('kb-cuentas')
+      .upload(fileName, file);
+
+    if (error) {
+      throw new Error(`Error uploading file: ${error.message}`);
+    }
+
+    return data;
+  }
 
   const onDrop = useCallback((acceptedFiles) => {
     setFilesUploaded((prev) => [...prev, ...acceptedFiles]);
@@ -33,18 +58,15 @@ function FileUploader() {
       }
 
       const formData = new FormData();
-      filesUploaded.forEach((file) => {
-        formData.append('files', file);
-      });
+      await Promise.all(filesUploaded.map((file) => uploadToSupabase(file)));
 
-      const result = await uploadFiles(formData);
+      // const result = await uploadFiles(formData);
 
-      if (!result.success) {
-        throw new Error(result.error || 'Error al subir los archivos');
-      }
+      // if (!result.success) {
+      //throw new Error(result.error || 'Error al subir los archivos');
+      // }
 
       setFilesUploaded([]);
-      // Opcional: Mostrar mensaje de éxito
     } catch (err) {
       setError(err.message);
     } finally {

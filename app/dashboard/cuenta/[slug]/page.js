@@ -7,6 +7,9 @@ import Markdown from 'react-markdown';
 
 export default async function PerfilCuenta({ params }) {
   const supabase = await createClient();
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
   const slug = (await params).slug;
   const { data, error } = await supabase
     .from('cuentas')
@@ -41,7 +44,10 @@ export default async function PerfilCuenta({ params }) {
           ))}
         </div>
         <div className="flex flex-col gap-2">
-          <FileUploader />
+          <FileUploader
+            accountSlug={data.slug}
+            accessToken={session?.access_token}
+          />
           <h1 className="text-2xl font-extrabold my-4">Archivos</h1>
           <div>
             {data.archivos.map((file) => (
