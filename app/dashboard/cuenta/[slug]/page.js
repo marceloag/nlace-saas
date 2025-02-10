@@ -13,10 +13,15 @@ export default async function PerfilCuenta({ params }) {
   const slug = (await params).slug;
   const { data, error } = await supabase
     .from('cuentas')
-    .select()
+    .select('*, archivos-kb(*)')
     .limit(1)
     .eq('slug', slug)
     .single();
+
+  if (data) {
+    data.archivosKB = data['archivos-kb'];
+    delete data['archivos-kb'];
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -47,15 +52,18 @@ export default async function PerfilCuenta({ params }) {
           <FileUploader
             accountSlug={data.slug}
             accessToken={session?.access_token}
+            accountId={data.id}
           />
           <h1 className="text-2xl font-extrabold my-4">Archivos</h1>
           <div>
-            {data.archivos.map((file) => (
+            {data.archivosKB.map((file) => (
               <div
-                key={file}
+                key={file.id}
                 className="flex flex-row items-center justify-between"
               >
-                <span className="text-primary">{file.split('/').pop()}</span>
+                <span className="text-primary">
+                  {file.nombre_archivo.split('/').pop()}
+                </span>
                 <DownloadFileButton file={file} />
               </div>
             ))}

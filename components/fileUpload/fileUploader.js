@@ -4,8 +4,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@supabase/supabase-js';
+import { Toaster, toast } from 'sonner';
 
-function FileUploader({ accountSlug, accessToken }) {
+function FileUploader({ accountSlug, accessToken, accountId }) {
   const [filesUploaded, setFilesUploaded] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,13 +18,7 @@ function FileUploader({ accountSlug, accessToken }) {
     }
   );
 
-  async function uploadToSupabase(file) {
-    const cleanFileName = file.name
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
-    const fileName = `${accountSlug}/${Date.now()}-${cleanFileName}`;
-
+  async function uploadToSupabase(file, fileName) {
     const { data, error } = await supabase.storage
       .from('kb-cuentas')
       .upload(fileName, file);
@@ -33,6 +28,29 @@ function FileUploader({ accountSlug, accessToken }) {
     }
 
     return data;
+  }
+
+  async function updateFileDatabase(fileUrls) {
+    console.log('Actualizando base de datos con:', fileUrls);
+    for (const file of fileUrls) {
+      console.log(file);
+      const { data: dataSignedUrl, error: errorSigned } = await supabase.storage
+        .from('kb-cuentas')
+        .createSignedUrl(file, 3600);
+      if (errorSigned) throw errorSigned;
+      const { error: archivosError } = await supabase
+        .from('archivos-kb')
+        .insert([
+          {
+            nombre_archivo: file,
+            signed_url: dataSignedUrl.signedUrl,
+            cuenta: accountId,
+            bucket: 'kb-cuentas',
+            status: 'pending'
+          }
+        ]);
+      if (archivosError) throw archivosError;
+    }
   }
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -48,6 +66,8 @@ function FileUploader({ accountSlug, accessToken }) {
   });
 
   const handleSubmit = async (e) => {
+    const fileUrls = [];
+
     e.preventDefault();
     setIsLoading(true);
     setError(null);
@@ -57,25 +77,33 @@ function FileUploader({ accountSlug, accessToken }) {
         throw new Error('Por favor, selecciona al menos un archivo.');
       }
 
-      const formData = new FormData();
-      await Promise.all(filesUploaded.map((file) => uploadToSupabase(file)));
-
-      // const result = await uploadFiles(formData);
-
-      // if (!result.success) {
-      //throw new Error(result.error || 'Error al subir los archivos');
-      // }
-
+      await Promise.all(
+        // Subir archivos a Supabase
+        filesUploaded.map(async (file) => {
+          const cleanFileName = file.name
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
+          const fileName = `${accountSlug}/${Date.now()}-${cleanFileName}`;
+          const resultUpload = await uploadToSupabase(file, fileName);
+          fileUrls.push(fileName);
+          // Actualizar tabla de archivos
+          const resultUpdate = await updateFileDatabase(fileUrls);
+        })
+      );
       setFilesUploaded([]);
     } catch (err) {
       setError(err.message);
     } finally {
+      console.log('Archivos subidos:', fileUrls);
+      toast.success(`Se han subido exitosamente los archivos. `);
       setIsLoading(false);
     }
   };
 
   return (
     <>
+      <Toaster position="bottom-center" richColors />
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded-md">
