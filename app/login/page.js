@@ -1,8 +1,7 @@
 import { login, signup, loginWithGoogle } from './actions';
 
-export default function LoginPage() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get('error');
+export default function LoginPage({ searchParams }) {
+  const error = searchParams.error;
   return (
     <div>
       <form>
