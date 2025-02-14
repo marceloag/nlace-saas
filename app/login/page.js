@@ -1,9 +1,16 @@
 import { login, signup, loginWithGoogle } from './actions';
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
   return (
     <div>
       <form>
+        {error && (
+          <div className="error-message text-red-500 border-[1px] border-solid w-96 px-4 py-2 mb-2">
+            {error}
+          </div>
+        )}
         <div className="flex flex-col items-center justify-center h-screen dark:bg-gray-50 gap-8">
           <img src="/nlace_black.svg" alt="Nlace Logo" className=" w-48" />
           <button

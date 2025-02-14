@@ -67,7 +67,7 @@ export async function updateSession(request) {
 
       const url = request.nextUrl.clone();
       url.pathname = '/login';
-      url.searchParams.set('error', 'No tienes permisos para acceder');
+      url.searchParams.set('error', '❌ No tienes permisos para acceder');
 
       // Crear respuesta de redirección manteniendo las cookies de Supabase
       const redirectResponse = NextResponse.redirect(url);
