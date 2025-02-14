@@ -54,7 +54,12 @@ export default async function PerfilCuenta({ params }) {
             accessToken={session?.access_token}
             accountId={data.id}
           />
-          <h1 className="text-2xl font-extrabold my-4">Archivos</h1>
+          <h1 className="text-2xl font-extrabold my-4 flex flex-row items-center">
+            Archivos
+            <small className="text-xs ml-4 font-light">
+              ({data.archivosKB.length})
+            </small>
+          </h1>
           <div>
             {data.archivosKB.map((file) => (
               <div

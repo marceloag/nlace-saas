@@ -30,27 +30,24 @@ function FileUploader({ accountSlug, accessToken, accountId }) {
     return data;
   }
 
-  async function updateFileDatabase(fileUrls) {
-    console.log('Actualizando base de datos con:', fileUrls);
-    for (const file of fileUrls) {
-      console.log(file);
-      const { data: dataSignedUrl, error: errorSigned } = await supabase.storage
-        .from('kb-cuentas')
-        .createSignedUrl(file, 3600);
-      if (errorSigned) throw errorSigned;
-      const { error: archivosError } = await supabase
-        .from('archivos-kb')
-        .insert([
-          {
-            nombre_archivo: file,
-            signed_url: dataSignedUrl.signedUrl,
-            cuenta: accountId,
-            bucket: 'kb-cuentas',
-            status: 'pending'
-          }
-        ]);
-      if (archivosError) throw archivosError;
-    }
+  async function updateFileDatabase(fileName) {
+    const { data: dataSignedUrl, error: errorSigned } = await supabase.storage
+      .from('kb-cuentas')
+      .createSignedUrl(fileName, 3600);
+
+    if (errorSigned) throw errorSigned;
+
+    const { error: archivosError } = await supabase.from('archivos-kb').insert([
+      {
+        nombre_archivo: fileName,
+        signed_url: dataSignedUrl.signedUrl,
+        cuenta: accountId,
+        bucket: 'kb-cuentas',
+        status: 'pending'
+      }
+    ]);
+
+    if (archivosError) throw archivosError;
   }
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -66,8 +63,6 @@ function FileUploader({ accountSlug, accessToken, accountId }) {
   });
 
   const handleSubmit = async (e) => {
-    const fileUrls = [];
-
     e.preventDefault();
     setIsLoading(true);
     setError(null);
@@ -77,26 +72,27 @@ function FileUploader({ accountSlug, accessToken, accountId }) {
         throw new Error('Por favor, selecciona al menos un archivo.');
       }
 
-      await Promise.all(
-        // Subir archivos a Supabase
-        filesUploaded.map(async (file) => {
-          const cleanFileName = file.name
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
-          const fileName = `${accountSlug}/${Date.now()}-${cleanFileName}`;
-          const resultUpload = await uploadToSupabase(file, fileName);
-          fileUrls.push(fileName);
-          // Actualizar tabla de archivos
-          const resultUpdate = await updateFileDatabase(fileUrls);
-        })
-      );
+      // Procesar archivos uno por uno
+      for (const file of filesUploaded) {
+        const cleanFileName = file.name
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9\-_.]/g, ' ');
+        const fileName = `${accountSlug}/${Date.now()}-${cleanFileName}`;
+
+        // Subir archivo a storage
+        await uploadToSupabase(file, fileName);
+
+        // Actualizar base de datos para este archivo
+        await updateFileDatabase(fileName);
+      }
+
       setFilesUploaded([]);
+      toast.success('Se han subido exitosamente los archivos.');
     } catch (err) {
       setError(err.message);
+      toast.error('Error al subir los archivos: ' + err.message);
     } finally {
-      console.log('Archivos subidos:', fileUrls);
-      toast.success(`Se han subido exitosamente los archivos. `);
       setIsLoading(false);
     }
   };

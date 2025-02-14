@@ -68,18 +68,33 @@ export async function updateSession(request) {
     return NextResponse.redirect(url);
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  if (user) {
+    const { data: userData, error } = await supabase
+      .from('usuarios') // Asegúrate de que este es el nombre correcto de tu tabla
+      .select('permisos')
+      .eq('id', user.id)
+      .single();
+
+    // Si hay error o no hay permisos, redirigir al login
+    if (error || !userData?.permisos?.length) {
+      // Cerrar sesión
+      await supabase.auth.signOut();
+
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      url.searchParams.set('error', 'No tienes permisos para acceder');
+
+      // Crear nueva respuesta de redirección
+      const redirectResponse = NextResponse.redirect(url);
+
+      // Copiar todas las cookies de la respuesta original
+      response.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie.options);
+      });
+
+      return redirectResponse;
+    }
+  }
 
   return supabaseResponse;
 }

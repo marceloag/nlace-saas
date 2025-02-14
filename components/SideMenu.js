@@ -12,7 +12,8 @@ import {
   ConfigurationIcon,
   DashboardIcon,
   LogoutIcon,
-  AccountsIcon
+  AccountsIcon,
+  RobotIcon
 } from '@/components/icons/Icons';
 
 function SideMenu({ userData }) {
@@ -62,10 +63,20 @@ function SideMenu({ userData }) {
           <Tooltip>
             <TooltipTrigger>
               <Link href="/dashboard/cuentas">
+                <RobotIcon />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>Agentes</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Link href="/dashboard/usuarios">
                 <AccountsIcon />
               </Link>
             </TooltipTrigger>
-            <TooltipContent>Cuentas</TooltipContent>
+            <TooltipContent>Usuarios</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>

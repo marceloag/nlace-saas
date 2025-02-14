@@ -157,7 +157,7 @@ function Chat({ userId }) {
                       }}
                     >
                       <span className="text-xs text-gray-400 flex flex-row items-center gap-1 cursor-pointer">
-                        <EditIcon />
+                        <EditIcon width="1.2em" height="1.2em" />
                         Editar Posts
                       </span>
                     </Link>
