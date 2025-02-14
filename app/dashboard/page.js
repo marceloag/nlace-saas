@@ -18,8 +18,7 @@ export async function getUserPersmisions(userEmail) {
     .eq('email', userEmail)
     .single();
   if (error) throw error;
-  console.log(permissions);
-  return permissions;
+  return permissions.permisos;
 }
 
 export default async function PrivatePage() {
@@ -27,11 +26,10 @@ export default async function PrivatePage() {
   const { data, error } = await supabase.auth.getUser();
   const permisos = await getUserPersmisions(data.user.email);
   const accounts = await getAccounts();
-  // check which accounts the user has access to
-  // const userAccounts = accounts.filter((account) =>
-  //   permisos.includes(account.id)
-  // );
-  // console.log(userAccounts);
+  const userAccounts = accounts.filter((account) =>
+    permisos.includes(account.id)
+  );
+  console.log('accounts', userAccounts);
 
   return (
     <>
