@@ -2,77 +2,62 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
 export async function updateSession(request) {
+  // Crear respuesta inicial de Supabase
   let supabaseResponse = NextResponse.next({
     request
   });
 
+  // Inicializar cliente de Supabase
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
-        getAll() {
-          return request.cookies.getAll();
+        get(name) {
+          return request.cookies.get(name)?.value;
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({
-            request
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
+        set(name, value, options) {
+          request.cookies.set({ name, value, ...options });
+          supabaseResponse.cookies.set({ name, value, ...options });
         },
         remove(name, options) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers
-            }
-          });
-          response.cookies.set({
-            name,
-            value: '',
-            ...options
-          });
+          request.cookies.set({ name, value: '', ...options });
+          supabaseResponse.cookies.set({ name, value: '', ...options });
         }
       }
     }
   );
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-
-  // IMPORTANT: DO NOT REMOVE auth.getUser()
-
+  // Obtener usuario actual
   const {
     data: { user }
   } = await supabase.auth.getUser();
 
+  // Si no hay usuario y no está en páginas públicas, redirigir al login
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/auth')
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    console.log('Redirecting to /login from middleware');
     url.pathname = '/login';
-    return NextResponse.redirect(url);
+    url.searchParams.set('error', 'Debes iniciar sesión');
+
+    // Crear respuesta de redirección manteniendo las cookies de Supabase
+    const redirectResponse = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie.options);
+    });
+
+    return redirectResponse;
   }
 
+  // Si hay usuario, verificar sus permisos
   if (user) {
     const { data: userData, error } = await supabase
-      .from('usuarios') // Asegúrate de que este es el nombre correcto de tu tabla
+      .from('usuarios')
       .select('permisos')
-      .eq('id', user.id)
+      .eq('email', user.email)
       .single();
 
     // Si hay error o no hay permisos, redirigir al login
@@ -84,11 +69,9 @@ export async function updateSession(request) {
       url.pathname = '/login';
       url.searchParams.set('error', 'No tienes permisos para acceder');
 
-      // Crear nueva respuesta de redirección
+      // Crear respuesta de redirección manteniendo las cookies de Supabase
       const redirectResponse = NextResponse.redirect(url);
-
-      // Copiar todas las cookies de la respuesta original
-      response.cookies.getAll().forEach((cookie) => {
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
         redirectResponse.cookies.set(cookie.name, cookie.value, cookie.options);
       });
 
