@@ -2,15 +2,16 @@ import { createClient } from '@/utils/supabase/server';
 import Chat from '@/components/chat/Chat';
 import { useAccount } from '@/context/AccountContext';
 import AccountSwitcher from '@/components/AccountSwitch';
-const supabase = await createClient();
 
 export async function getAccounts() {
+  const supabase = await createClient();
   const { data: accounts, error } = await supabase.from('cuentas').select('*');
   if (error) throw error;
   return accounts;
 }
 
 export async function getUserPersmisions(userEmail) {
+  const supabase = await createClient();
   const { data: permissions, error } = await supabase
     .from('usuarios')
     .select('permisos')
@@ -21,6 +22,7 @@ export async function getUserPersmisions(userEmail) {
 }
 
 export default async function PrivatePage() {
+  const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   const permisos = await getUserPersmisions(data.user.email);
   const accounts = await getAccounts();
