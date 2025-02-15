@@ -10,7 +10,7 @@ export async function getAccounts() {
   return accounts;
 }
 
-export async function getUserPersmisions(userEmail) {
+export async function getUserPermissions(userEmail) {
   const supabase = await createClient();
   const { data: permissions, error } = await supabase
     .from('usuarios')
@@ -24,12 +24,14 @@ export async function getUserPersmisions(userEmail) {
 export default async function PrivatePage() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
-  const permisos = await getUserPersmisions(data.user.email);
+  const permisos = await getUserPermissions(data.user.email);
   const accounts = await getAccounts();
   const userAccounts = accounts.filter((account) =>
     permisos.includes(account.id)
   );
+  console.log('permisos', permisos);
   console.log('accounts', userAccounts);
+  console.log('user accounts', userAccounts);
 
   return (
     <>
