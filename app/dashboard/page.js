@@ -26,17 +26,19 @@ export default async function PrivatePage() {
   const { data, error } = await supabase.auth.getUser();
   const permisos = await getUserPermissions(data.user.email);
   const accounts = await getAccounts();
-  const userAccounts = accounts.filter((account) =>
-    permisos.includes(account.id.toString())
-  );
-  console.log('permisos', permisos);
-  console.log('accounts', accounts);
-  console.log('user accounts', userAccounts);
+  let userAccounts;
+  if (!permisos.includes('0')) {
+    userAccounts = accounts.filter((account) =>
+      permisos.includes(account.id.toString())
+    );
+  } else {
+    userAccounts = accounts;
+  }
 
   return (
     <>
       <AccountSwitcher
-        accounts={accounts}
+        accounts={userAccounts}
         className="absolute right-4 z-[99]"
       />
       <Chat userId={data.user.id} />
