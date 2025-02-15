@@ -30,7 +30,7 @@ export default async function PrivatePage() {
     permisos.includes(account.id)
   );
   console.log('permisos', permisos);
-  console.log('accounts', userAccounts);
+  console.log('accounts', accounts);
   console.log('user accounts', userAccounts);
 
   return (
