@@ -27,7 +27,7 @@ export default async function PrivatePage() {
   const permisos = await getUserPermissions(data.user.email);
   const accounts = await getAccounts();
   const userAccounts = accounts.filter((account) =>
-    permisos.includes(account.id)
+    permisos.includes(account.id.toString())
   );
   console.log('permisos', permisos);
   console.log('accounts', accounts);
