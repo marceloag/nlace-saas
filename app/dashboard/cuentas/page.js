@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export async function getAccounts() {
   const supabase = await createClient();
@@ -19,6 +20,12 @@ async function Cuentas() {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        <Link
+          href="/dashboard/crear-cuenta"
+          className="mb-2 mx-auto w-full flex justify-center"
+        >
+          <Button>Crear Nuevo Agente</Button>
+        </Link>
         <ul>
           {accounts.map((account) => (
             <li

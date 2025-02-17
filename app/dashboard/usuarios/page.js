@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { EditIcon } from '@/components/icons/Icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import UserForm from '@/components/users/CreateUser';
 import {
   Table,
   TableBody,
@@ -22,15 +23,27 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
-export async function getUsers() {
+async function getUsers() {
   const supabase = await createClient();
   const { data: accounts, error } = await supabase.from('usuarios').select('*');
   if (error) throw error;
   return accounts;
 }
 
+async function getAccounts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from('cuentas').select('*');
+  if (error) throw error;
+  return data;
+}
+
 async function Usuarios() {
   const usuarios = await getUsers();
+  const cuentas = await getAccounts();
+  const supabase = await createClient();
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
   return (
     <>
@@ -80,15 +93,8 @@ async function Usuarios() {
               <DialogTrigger asChild>
                 <Button>Agregar Usuario</Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Agregar Usuario</DialogTitle>
-                  <DialogDescription>.</DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4"></div>
-                <DialogFooter>
-                  <Button type="submit">Guardar Cambios</Button>
-                </DialogFooter>
+              <DialogContent className="sm:max-w-[600px]">
+                <UserForm />
               </DialogContent>
             </Dialog>
           </div>

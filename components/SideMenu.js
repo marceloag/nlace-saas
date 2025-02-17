@@ -16,7 +16,7 @@ import {
   RobotIcon
 } from '@/components/icons/Icons';
 
-function SideMenu({ userData }) {
+function SideMenu({ userData, permisos }) {
   const handleLogout = async () => {
     try {
       await logout();
@@ -46,49 +46,40 @@ function SideMenu({ userData }) {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Link href="/dashboard/crear-cuenta">
-                <AddAccountIcon />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Agregar Cuenta</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Link href="/dashboard/cuentas">
-                <RobotIcon />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>Agentes</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Link href="/dashboard/usuarios">
-                <AccountsIcon />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>Usuarios</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Link href="/dashboard/configuracion">
-                <ConfigurationIcon />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>Configuración</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {permisos.includes('0') && (
+          <>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link href="/dashboard/cuentas">
+                    <RobotIcon />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Agentes</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link href="/dashboard/usuarios">
+                    <AccountsIcon />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Usuarios</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link href="/dashboard/configuracion">
+                    <ConfigurationIcon />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Configuración</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        )}
       </div>
       <div className="flex flex-col gap-2 py-2">
         <button onClick={handleLogout}>

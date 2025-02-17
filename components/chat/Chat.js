@@ -33,7 +33,6 @@ function Chat({ userId }) {
       try {
         const messagesSB = await getMessages(userId, currentAccount?.id);
         setMessages(messagesSB);
-        console.log(messagesSB);
       } catch (error) {
         console.error('Failed to fetch messages:', error);
       }
