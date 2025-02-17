@@ -3,7 +3,7 @@ import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
-  title: 'NLACE AI Agent Studio',
+  title: 'NLACE AI Agents Studio',
   description:
     'Aplicación de creación de agentes de IA personalizados para clientes de Nlace.com'
 };
