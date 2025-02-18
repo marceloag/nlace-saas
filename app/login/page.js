@@ -5,11 +5,11 @@ export default function LoginPage({ searchParams }) {
   return (
     <div>
       <form>
-        {error && (
+        {/* {error && (
           <div className="error-message text-red-500 border-[1px] border-solid w-96 px-4 py-2 mb-2">
             {error}
           </div>
-        )}
+        )} */}
         <div className="flex flex-col items-center justify-center h-screen dark:bg-gray-50 gap-8">
           <img src="/nlace_black.svg" alt="Nlace Logo" className=" w-48" />
           <button
@@ -24,6 +24,13 @@ export default function LoginPage({ searchParams }) {
             />
             <span className="text-gray-800">Inicia sesión con Google</span>
           </button>
+          <a
+            href="https://nlace.com/politica"
+            className="px-3 py-2 rounded-sm text-gray-500 dark:text-gray-200 border-solid border-[1px] border-gray-300 dark:border-gray-700 mt-8  hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+            target="_blank"
+          >
+            Politica de Privacidad
+          </a>
         </div>
       </form>
     </div>
