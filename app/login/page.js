@@ -24,13 +24,22 @@ export default function LoginPage({ searchParams }) {
             />
             <span className="text-gray-800">Inicia sesión con Google</span>
           </button>
-          <a
-            href="https://nlace.com/politica"
-            className="px-3 py-2 rounded-sm text-gray-500 dark:text-gray-200 border-solid border-[1px] border-gray-300 dark:border-gray-700 mt-8  hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-            target="_blank"
-          >
-            Politica de Privacidad
-          </a>
+          <div className="flex flex-row gap-4 absolute bottom-4">
+            <a
+              href="https://nlace.com/politica"
+              className="px-3 py-2 rounded-sm text-gray-500 dark:text-gray-200 border-solid border-b-[2px] border-gray-300 dark:border-gray-700 mt-8  hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-xs"
+              target="_blank"
+            >
+              Politica de Privacidad
+            </a>
+            <a
+              href="https://nlace.com/condiciones"
+              className="px-3 py-2 rounded-sm text-gray-500 dark:text-gray-200 border-solid border-b-[2px] border-gray-300 dark:border-gray-700 mt-8  hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-xs"
+              target="_blank"
+            >
+              Condiciones de Uso
+            </a>
+          </div>
         </div>
       </form>
     </div>
