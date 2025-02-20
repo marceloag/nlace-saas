@@ -12,7 +12,8 @@ import {
   CommandIcon,
   EnterIcon,
   SendIcon,
-  EditIcon
+  EditIcon,
+  ClipIcon
 } from '@/components/icons/Icons';
 
 function Chat({ userId }) {
@@ -206,7 +207,10 @@ function Chat({ userId }) {
           </div>
         </div>
         <div className="flex flex-row items-center justify-between items-center gap-2 mt-4 w-1/2 mx-auto px-2">
-          <SelectModel />
+          <div className="flex flex-row gap-4 items-center">
+            <ClipIcon className="fill-gray-800" />
+            <SelectModel />
+          </div>
           <small className="text-gray-500 flex flex-row items-center justify-center gap-1">
             Presiona
             <CommandIcon /> <EnterIcon />
