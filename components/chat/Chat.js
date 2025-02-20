@@ -7,6 +7,7 @@ import Loading from '../ui/Loading';
 import Markdown from 'react-markdown';
 import { motion } from 'motion/react';
 import { useAccount } from '@/context/AccountContext';
+import SelectModel from '@/components/ModelSelect';
 import {
   CommandIcon,
   EnterIcon,
@@ -204,11 +205,14 @@ function Chat({ userId }) {
             </a>
           </div>
         </div>
-        <small className="text-center mt-1 text-gray-500 flex flex-row items-center justify-center gap-1">
-          Presiona
-          <CommandIcon /> <EnterIcon />
-          para enviar
-        </small>
+        <div className="flex flex-row items-center justify-between items-center gap-2 mt-4 w-1/2 mx-auto px-2">
+          <SelectModel />
+          <small className="text-gray-500 flex flex-row items-center justify-center gap-1">
+            Presiona
+            <CommandIcon /> <EnterIcon />
+            para enviar
+          </small>
+        </div>
       </main>
     </>
   );

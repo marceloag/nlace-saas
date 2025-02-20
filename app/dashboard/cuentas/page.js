@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { EditIcon } from '@/components/icons/Icons';
 
 export async function getAccounts() {
   const supabase = await createClient();
@@ -74,6 +75,12 @@ async function Cuentas() {
                       </g>
                     </g>
                   </svg>
+                </Link>
+                <Link
+                  href={`/dashboard/editar-cuenta/${account.slug}`}
+                  className="btn btn-sm btn-primary"
+                >
+                  <EditIcon width="1.5em" height="1.5em" />
                 </Link>
                 <button className="btn btn-sm btn-danger">
                   <svg
