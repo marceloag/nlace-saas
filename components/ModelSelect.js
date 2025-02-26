@@ -8,11 +8,19 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { OpenAI, Gemini } from '@/components/icons/Icons';
+import { OpenAI, Gemini, Anthropic } from '@/components/icons/Icons';
 
-export default function SelectModel() {
+export default function SelectModel({ setModel }) {
+  const handleSelectModel = (value) => {
+    setModel(value);
+  };
+
   return (
-    <Select className="text-sm rounded-lg" defaultValue="4o">
+    <Select
+      className="text-sm rounded-lg"
+      defaultValue="4o"
+      onValueChange={handleSelectModel}
+    >
       <SelectTrigger className="w-auto">
         <SelectValue placeholder="Modelo de IA" />
       </SelectTrigger>
@@ -23,9 +31,13 @@ export default function SelectModel() {
             <OpenAI className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
             Open Ai 4o-mini
           </SelectItem>
-          <SelectItem value="gemini" className="text-sm">
+          {/* <SelectItem value="gemini-2.0-flash" className="text-sm">
             <Gemini className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
-            Gemini Flash 2.0
+            Gemini 2.0 Flash
+          </SelectItem> */}
+          <SelectItem value="sonnet-3.7" className="text-sm">
+            <Anthropic className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
+            Anthropic Claude 3.7 Sonnet
           </SelectItem>
         </SelectGroup>
       </SelectContent>
