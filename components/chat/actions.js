@@ -1,6 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 const supabase = await createClient();
+const N8N_URL = process.env.NEXT_PUBLIC_N8N_URL;
 
 export async function sendMessage(
   prompt,
@@ -9,9 +10,12 @@ export async function sendMessage(
   accountId,
   accountName,
   accountDesc,
-  promptAgente
+  promptAgente,
+  model
 ) {
-  const response = await fetch('https://n8n.marceloag.dev/webhook/chat-nlace', {
+  const endPoint = '/webhook/chat-nlace';
+  const sendMessageURL = N8N_URL + endPoint;
+  const response = await fetch(sendMessageURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -23,7 +27,8 @@ export async function sendMessage(
       accountId,
       accountName,
       accountDesc,
-      promptAgente
+      promptAgente,
+      model
     })
   });
   const result = await response.json();
@@ -36,24 +41,6 @@ export async function sendMessage(
 }
 
 sendMessage.maxDuration = 30;
-
-export async function generarPauta() {
-  const response = await fetch(
-    'https://n8n.marceloag.dev/webhook/crear-pauta',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({})
-    }
-  );
-  const result = await response.json();
-
-  return {
-    message: result
-  };
-}
 
 export async function getMessages(userId, accountId) {
   if (accountId) {

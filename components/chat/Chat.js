@@ -18,6 +18,7 @@ import {
 
 function Chat({ userId }) {
   const messagesEndRef = useRef(null);
+  const [model, setModel] = useState('4o');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pauta, setPauta] = useState('');
@@ -53,6 +54,7 @@ function Chat({ userId }) {
       handleSubmit(e);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
@@ -63,6 +65,9 @@ function Chat({ userId }) {
       timestamp: new Date(),
       accountId: currentAccount.id
     };
+
+    setPrompt('');
+    setIsLoading(true);
 
     setMessages((prev) => [...prev, userMessage]);
     try {
@@ -76,9 +81,6 @@ function Chat({ userId }) {
       console.error('Failed to save message:', error);
     }
 
-    setPrompt('');
-    setIsLoading(true);
-
     try {
       const response = await sendMessage(
         prompt.trim(),
@@ -87,7 +89,8 @@ function Chat({ userId }) {
         currentAccount.id,
         currentAccount.nombre,
         currentAccount.descripcion,
-        currentAccount.prompt_agente
+        currentAccount.prompt_agente,
+        model
       );
       const systemMessage = {
         id: (Date.now() + 1).toString(),
@@ -209,7 +212,7 @@ function Chat({ userId }) {
         <div className="flex flex-row items-center justify-between items-center gap-2 mt-4 w-1/2 mx-auto px-2">
           <div className="flex flex-row gap-4 items-center">
             <ClipIcon className="fill-gray-800" />
-            <SelectModel />
+            <SelectModel setModel={setModel} />
           </div>
           <small className="text-gray-500 flex flex-row items-center justify-center gap-1">
             Presiona
