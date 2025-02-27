@@ -29,7 +29,11 @@ export default function SelectModel({ setModel }) {
           {/* <SelectLabel>Fruits</SelectLabel> */}
           <SelectItem value="4o" className="text-sm" selected>
             <OpenAI className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
-            Open Ai 4o-mini
+            Open Ai GPT 4o
+          </SelectItem>
+          <SelectItem value="4.5" className="text-sm" selected>
+            <OpenAI className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
+            Open Ai GPT 4.5
           </SelectItem>
           {/* <SelectItem value="gemini-2.0-flash" className="text-sm">
             <Gemini className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
