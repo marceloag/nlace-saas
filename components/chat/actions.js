@@ -40,7 +40,7 @@ export async function sendMessage(
   };
 }
 
-sendMessage.maxDuration = 30;
+sendMessage.maxDuration = 45;
 
 export async function getMessages(userId, accountId) {
   if (accountId) {
