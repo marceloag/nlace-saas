@@ -94,67 +94,34 @@ export default function LoginPage({ searchParams }) {
         </div>
       </section>
       {/*  Carrusel */}
-      {/* Partner Logos - ahora como carrusel */}
       <div className="w-full border-t border-b border-[#3A3A3A] py-12 overflow-hidden">
-        <div className="relative">
-          {/* Primera fila de logos con animación */}
-          <div className="flex animate-marquee">
-            <div className="flex space-x-16 mx-8 items-center">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg"
-                alt="OpenAI"
-                className="h-8 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Google_Bard_logo.svg"
-                alt="Gemini"
-                className="h-8 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="/langchain.svg"
-                alt="Langchain"
-                className="h-12 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="/n8n.svg"
-                alt="n8n"
-                className="h-10 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="/metricool.svg"
-                alt="Metricool"
-                className="h-8 opacity-70 brightness-0 invert"
-              />
-            </div>
-
-            {/* Duplicado para crear efecto continuo */}
-            <div className="flex space-x-16 mx-22 items-center ml-60">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg"
-                alt="OpenAI"
-                className="h-8 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Google_Bard_logo.svg"
-                alt="Gemini"
-                className="h-8 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="/langchain.svg"
-                alt="Langchain"
-                className="h-12 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="/n8n.svg"
-                alt="n8n"
-                className="h-10 opacity-70 brightness-0 invert"
-              />
-              <img
-                src="/metricool.svg"
-                alt="Metricool"
-                className="h-8 opacity-70 brightness-0 invert"
-              />
-            </div>
+        <div className="relative flex overflow-x-hidden">
+          <div className="w-full xl:w-2/3 xl:mx-auto flex items-center justify-around flex-row object-contain">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg"
+              alt="OpenAI"
+              className="h-8 opacity-70 brightness-0 invert"
+            />
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Google_Bard_logo.svg"
+              alt="Gemini"
+              className="h-8 opacity-70 brightness-0 invert"
+            />
+            <img
+              src="/langchain.svg"
+              alt="Langchain"
+              className="h-12 opacity-70 brightness-0 invert"
+            />
+            <img
+              src="/n8n.svg"
+              alt="n8n"
+              className="h-10 opacity-70 brightness-0 invert"
+            />
+            <img
+              src="/metricool.svg"
+              alt="Metricool"
+              className="h-8 opacity-70 brightness-0 invert"
+            />
           </div>
         </div>
       </div>
