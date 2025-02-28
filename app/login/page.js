@@ -9,8 +9,7 @@ import {
 } from '@/components/ui/select';
 import { Globe, Shield, Zap, BarChart, CreditCard, Rocket } from 'lucide-react';
 import HubspotForm from '@/components/Hubspot';
-import { Langchain } from '@/components/icons/Icons';
-import { func } from '@react-native-community/cli/build/commands/link/link';
+import Link from 'next/link';
 
 export default function LoginPage({ searchParams }) {
   const error = searchParams.error;
