@@ -31,6 +31,10 @@ export default function SelectModel({ setModel }) {
             <OpenAI className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
             Open Ai GPT 4o
           </SelectItem>
+          <SelectItem value="3.5-turbo" className="text-sm" selected>
+            <OpenAI className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
+            Open Ai GPT 3.5 Turbo
+          </SelectItem>
           <SelectItem value="4.5" className="text-sm" selected>
             <OpenAI className="fill-gray-800 inline-block mr-1 -mt-[2px]" />
             Open Ai GPT 4.5

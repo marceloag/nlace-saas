@@ -8,6 +8,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Globe, Shield, Zap, BarChart, CreditCard, Rocket } from 'lucide-react';
+import FAQ from '@/components/landing/Faq';
 import HubspotForm from '@/components/Hubspot';
 import Link from 'next/link';
 
@@ -85,7 +86,7 @@ export default function LoginPage({ searchParams }) {
           <div className="flex justify-center lg:justify-end">
             <div className="bg-[#2A2A2A] p-6 rounded-xl shadow-lg">
               <img
-                src="/dashboard.png"
+                src="/captura-studio.png"
                 alt="Dashboard Analytics"
                 className="w-full max-w-md rounded-lg"
               />
@@ -127,17 +128,15 @@ export default function LoginPage({ searchParams }) {
       </div>
 
       {/* Dashboard Preview - Reemplazado por YouTube Embed */}
-      <section className="py-24 bg-[#212121]">
+      <section className="py-12 md:py-24 bg-[#212121]">
         <div className="container max-w-6xl mx-auto px-6">
-          <div className="bg-[#FAEAD7] rounded-xl p-6 md:p-8 shadow-lg">
-            <div className="w-full max-w-4xl mx-auto rounded-lg shadow-lg overflow-hidden aspect-video">
-              <iframe
-                src="https://www.youtube.com/embed/ApX-UhpUiOE"
-                title="NLACE AI Studio Demo"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              ></iframe>
+          <div className="bg-[#FAEAD7] rounded-xl p-6 md:p-8 shadow-lg flex items-end">
+            <div className="w-full max-w-4xl mx-auto rounded-lg shadow-lg overflow-hidden">
+              <img
+                alt="NLACE AI Studio Dashboard"
+                className="w-full h-auto"
+                src="captura-studio-dashboard.png"
+              />
             </div>
           </div>
         </div>
@@ -197,6 +196,8 @@ export default function LoginPage({ searchParams }) {
           </div>
         </div>
       </section>
+
+      <FAQ />
 
       {/* Alpha Access Section */}
       <section className="py-24 bg-[#212121]">
