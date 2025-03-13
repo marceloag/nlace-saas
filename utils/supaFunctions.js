@@ -1,5 +1,4 @@
-'use client';
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/server';
 
 export async function getAccounts() {
   const supabase = await createClient();
@@ -25,4 +24,15 @@ export async function downloadFile(fileName) {
   }
 
   return data;
+}
+
+export async function getUserPermissions(userEmail) {
+  const supabase = await createClient();
+  const { data: permissions, error } = await supabase
+    .from('usuarios')
+    .select('permisos')
+    .eq('email', userEmail)
+    .single();
+  if (error) throw error;
+  return permissions.permisos;
 }

@@ -1,25 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
-import Chat from '@/components/chat/newChat';
-
+import NewChat from '@/components/chat/newChat';
+import { getUserPermissions, getAccounts } from '@/utils/supaFunctions';
 import AccountSwitcher from '@/components/AccountSwitch';
-
-export async function getAccounts() {
-  const supabase = await createClient();
-  const { data: accounts, error } = await supabase.from('cuentas').select('*');
-  if (error) throw error;
-  return accounts;
-}
-
-export async function getUserPermissions(userEmail) {
-  const supabase = await createClient();
-  const { data: permissions, error } = await supabase
-    .from('usuarios')
-    .select('permisos')
-    .eq('email', userEmail)
-    .single();
-  if (error) throw error;
-  return permissions.permisos;
-}
 
 export default async function PrivatePage() {
   const supabase = await createClient();
@@ -37,13 +19,13 @@ export default async function PrivatePage() {
 
   return (
     <>
-      <header className="flex flex-col border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 justify-between">
+      <header className="flex flex-col border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 justify-between pl-4">
         <div className="w-full flex items-center justify-between p-4">
           <h1 className="text-xl font-bold truncate">Agente</h1>
           <AccountSwitcher accounts={userAccounts} />
         </div>
       </header>
-      <Chat userId={data.user.id} />
+      <NewChat userId={data.user.id} />
     </>
   );
 }
