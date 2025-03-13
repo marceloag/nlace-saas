@@ -1,15 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  PaperclipIcon,
-  Send,
-  Image,
-  FileUp,
-  SearchCode,
-  Sparkles,
-  ChevronDown
-} from 'lucide-react';
+import { PaperclipIcon, Send, Image, FileUp, SearchCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import SelectModel from '@/components/ModelSelect';

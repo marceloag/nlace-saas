@@ -4,9 +4,9 @@ import { useRef, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { MessageSquarePlus } from 'lucide-react';
 import Loading from '@/components/ui/Loading';
+import { MDXRemote } from 'next-mdx-remote-client/rsc';
 // ai sdk
-import { serialize } from 'next-mdx-remote/serialize';
-import { MDXRemote } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote-client/serialize';
 import Post from '@/components/Post';
 
 const components = {
@@ -42,32 +42,27 @@ function MdxContent({ content }) {
   }, [content]);
 
   if (isLoading) return <p>Cargando...</p>;
-  if (!mdxSource) return <p>{content}</p>; // Fallback a texto plano si hay error
+  if (!mdxSource) return <p>{content}</p>;
 
   return (
     <MDXRemote
       {...mdxSource}
       className="prose lg:prose-xl"
-      // options={options}
       components={components}
     />
   );
 }
 
-// Componente para determinar cómo renderizar el contenido
 function MessageContent({ content }) {
-  // Verificar si el contenido parece ser MDX (contiene sintaxis MDX)
   const isMdxLike =
     content.includes('#') ||
     content.includes('```') ||
     content.includes('**') ||
-    content.includes('<'); // Detección simple de posible MDX
+    content.includes('<');
 
   if (isMdxLike) {
     return <MdxContent content={content} />;
   }
-
-  // Si no parece MDX, renderizarlo como texto normal
   return <p>{content}</p>;
 }
 
@@ -124,10 +119,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
                 components={components}
               />
             )}
-            {/* <MessageContent
-              content={message.content}
-              // components={components}
-            /> */}
+
             {message.parts.map((part) => {
               if (part.type === 'tool-invocation') {
                 switch (part.toolInvocation.state) {
@@ -141,15 +133,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
               }
             })}
           </div>
-          <div className="text-xs text-gray-400 px-4">
-            {/* {message.timestamp.toLocaleTimeString()} */}
-          </div>
-          {/* 
-          {message.role === 'user' && (
-            <div className="w-8 h-8 rounded-full overflow-hidden border-white border-2 bg-gray-500 absolute -top-2">
-              <img src={avatar} alt="Avatar" />
-            </div>
-          )} */}
+          <div className="text-xs text-gray-400 px-4"></div>
         </motion.div>
       ))}
       {status == 'submitted' && (
