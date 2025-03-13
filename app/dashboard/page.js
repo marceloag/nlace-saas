@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
-import Chat from '@/components/chat/Chat';
-import { useAccount } from '@/context/AccountContext';
+import Chat from '@/components/chat/newChat';
+
 import AccountSwitcher from '@/components/AccountSwitch';
 
 export async function getAccounts() {
@@ -37,10 +37,12 @@ export default async function PrivatePage() {
 
   return (
     <>
-      <AccountSwitcher
-        accounts={userAccounts}
-        className="absolute right-4 z-[99]"
-      />
+      <header className="flex flex-col border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 justify-between">
+        <div className="w-full flex items-center justify-between p-4">
+          <h1 className="text-xl font-bold truncate">Agente</h1>
+          <AccountSwitcher accounts={userAccounts} />
+        </div>
+      </header>
       <Chat userId={data.user.id} />
     </>
   );

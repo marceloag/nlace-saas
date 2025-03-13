@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.2.3",
+    "@ai-sdk/react": "^1.1.22",
+    "@pinecone-database/pinecone": "^5.1.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-checkbox": "^1.1.4",
@@ -22,6 +25,7 @@
     "@supabase/supabase-js": "^2.47.6",
     "@uiw/react-md-editor": "^4.0.5",
     "@vercel/analytics": "^1.5.0",
+    "ai": "^4.1.57",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -29,6 +33,7 @@
     "lucide-react": "^0.469.0",
     "motion": "^11.15.0",
     "next": "14.2.20",
+    "next-mdx-remote": "^5.0.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
@@ -37,9 +42,11 @@
     "react-papaparse": "^4.4.0",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.14",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "eslint": "^8",
