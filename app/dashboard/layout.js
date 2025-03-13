@@ -17,13 +17,10 @@ export default async function DashboardLayout({ children }) {
     <section className="flex flex-row bg-gray-50">
       <AccountProvider>
         <SideMenu userData={data.user} permisos={permissions.permisos} />
-        <main className="flex flex-1 flex-col py-2 min-h-[calc(100vh-1.2em)] ml-14">
+        <main className="flex flex-1 flex-col ml-9 h-screen">
           <Header />
-          <div className="flex flex-col my-6 mx-4 w-full justify-between h-[100%] relative">
+          <div className="flex flex-1 flex-col w-full justify-start h-[100%] relative">
             {children}
-            <div>
-              <span className="text-xs text-gray-300"> V0.0.6</span>
-            </div>
           </div>
         </main>
       </AccountProvider>

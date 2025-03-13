@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { EditIcon } from '@/components/icons/Icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import UserForm from '@/components/users/CreateUser';
+import EditUser from '@/components/users/EditUser';
 import {
   Table,
   TableBody,
@@ -72,15 +73,8 @@ async function Usuarios() {
                       <DialogTrigger asChild>
                         <EditIcon width="1.5em" height="1.5em" />
                       </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                          <DialogTitle>Editar Usuario</DialogTitle>
-                          <DialogDescription>.</DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4"></div>
-                        <DialogFooter>
-                          <Button type="submit">Guardar Cambios</Button>
-                        </DialogFooter>
+                      <DialogContent className="sm:max-w-[800px]">
+                        <EditUser userId={usuario.id} />
                       </DialogContent>
                     </Dialog>
                   </TableCell>
