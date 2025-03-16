@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useAccount } from '@/context/AccountContext';
+import useAccountStore from '@/stores/accountStore';
 import ChatInput from '@/components/chat/ui/ChatInput';
 import ChatMessages from '@/components/chat/ui/ChatMessages';
 import { useChat } from '@ai-sdk/react';
@@ -10,7 +10,8 @@ function NewChat({ userId }) {
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
     maxSteps: 5
   });
-  const { currentAccount } = useAccount();
+
+  const currentAccount = useAccountStore((state) => state.currentAccount);
   const avatar = currentAccount?.avatar;
   const prevAccountRef = useRef();
 
@@ -18,7 +19,6 @@ function NewChat({ userId }) {
     if (prevAccountRef.current?.id === currentAccount?.id) {
       return;
     }
-    console.log(currentAccount);
     prevAccountRef.current = currentAccount;
   }, [currentAccount]);
 
