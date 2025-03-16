@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import NewChat from '@/components/chat/newChat';
-import {
-  getUserPermissions,
-  getAccounts,
-  getCurrentUser,
-  getUserDataAndPermissions
-} from '@/app/actions/usuarios';
+import { getUserDataAndPermissions } from '@/app/actions/usuarios';
 import { useUserStore } from '@/stores/userStore';
 import AccountSwitcher from '@/components/AccountSwitch';
 
