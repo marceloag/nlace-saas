@@ -15,10 +15,14 @@ import {
   AccountsIcon,
   RobotIcon
 } from '@/components/icons/Icons';
+import { useUserStore } from '@/stores/userStore';
 
 function SideMenu({ userData, permisos }) {
+  const logoutStore = useUserStore((state) => state.logoutStore);
+
   const handleLogout = async () => {
     try {
+      logoutStore();
       await logout();
     } catch (error) {
       console.error('Error en logout:', error);

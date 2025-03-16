@@ -6,8 +6,12 @@ export const useUserStore = create()(
   persist(
     (set) => ({
       user: null,
+      permisos: null,
+      accounts: null,
       setUser: (user) => set({ user }),
-      logout: () => set({ user: null })
+      setPermisos: (permisos) => set({ permisos }),
+      setAccounts: (accounts) => set({ accounts }),
+      logoutStore: () => set({ user: null, permisos: null, accounts: null })
     }),
     {
       name: 'user-storage',
