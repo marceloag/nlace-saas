@@ -4,8 +4,9 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+const supabase = await createClient();
+
 export async function getAccounts() {
-  const supabase = await createClient();
   const { data, error } = await supabase.from('cuentas').select('id, nombre');
   if (error) {
     console.error('Error al obtener cuentas:', error);
@@ -59,4 +60,95 @@ export async function updateAccount(formData, userId) {
     return { error: true, message: error.message };
   }
   return { success: true };
+}
+
+export async function downloadFile(fileName) {
+  const supabase = await createClient();
+
+  try {
+    const { data, error } = await supabase.storage
+      .from('kb-cuentas')
+      .download(fileName);
+
+    if (error) {
+      console.error('Error específico:', error.message);
+      return;
+    }
+  } catch (err) {
+    console.error('Error en la descarga:', err);
+  }
+
+  return data;
+}
+
+export async function getUserPermissions(userEmail) {
+  const { data: permissions, error } = await supabase
+    .from('usuarios')
+    .select('permisos')
+    .eq('email', userEmail)
+    .single();
+  if (error) throw error;
+  return permissions.permisos;
+}
+
+export async function getCurrentUser() {
+  const { data: userData, error } = await supabase.auth.getUser();
+
+  if (error) {
+    console.log('Error al obtener usuario actual:', error);
+  } else {
+    // console.log('Usuario actual:', userData);
+  }
+
+  return userData;
+}
+
+export async function getUserDataAndPermissions() {
+  console.log('Obteniendo datos del usuario...');
+  const { data: authUser, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !authUser) {
+    throw new Error('No user is logged in');
+  }
+
+  // 1. Obtener los permisos del usuario desde la tabla "usuarios"
+  const { data: permissionsData, error: permissionsError } = await supabase
+    .from('usuarios')
+    .select('permisos')
+    .eq('email', authUser.user.email)
+    .single();
+
+  if (permissionsError) throw permissionsError;
+
+  console.log('Permisos:', permissionsData.permisos);
+  console.log('Permisos incluidos:', permissionsData.permisos.includes(0));
+  const { data: accountsData, error: accountsError } =
+    permissionsData.permisos.includes('0')
+      ? await supabase.from('cuentas').select()
+      : await supabase.rpc('get_accounts_by_permissions', {
+          permission_ids: permissionsData.permisos
+        });
+
+  if (accountsError) throw accountsError;
+
+  return {
+    user: { id: authUser.user.id, email: authUser.user.email },
+    permisos: permissionsData.permisos,
+    accounts: accountsData
+  };
+}
+
+export async function fetchUserData() {
+  try {
+    const [userData, permisos, accounts] = await Promise.all([
+      getCurrentUser(),
+      getUserPermissions(userData?.user?.email), // Se ejecutará cuando userData esté listo
+      getAccounts()
+    ]);
+
+    return { user: userData.user, permisos, accounts };
+  } catch (error) {
+    console.error('Error al obtener datos del usuario:', error);
+    return null;
+  }
 }

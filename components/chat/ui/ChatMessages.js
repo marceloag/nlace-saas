@@ -4,9 +4,9 @@ import { useRef, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { MessageSquarePlus } from 'lucide-react';
 import Loading from '@/components/ui/Loading';
-import { MDXRemote } from 'next-mdx-remote-client/rsc';
+import { MDXRemote } from 'next-mdx-remote';
 // ai sdk
-import { serialize } from 'next-mdx-remote-client/serialize';
+import { serialize } from 'next-mdx-remote/serialize';
 import Post from '@/components/Post';
 
 const components = {
@@ -47,7 +47,7 @@ function MdxContent({ content }) {
   return (
     <MDXRemote
       {...mdxSource}
-      className="prose lg:prose-xl"
+      className="prose-sm lg:prose-xl"
       components={components}
     />
   );
@@ -113,7 +113,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
                 : 'bg-[#F1F5F9] text-gray-700 max-w-[60%]'
             }`}
           >
-            {message.content && (
+            {message.content && message.content.length > 0 && (
               <MessageContent
                 content={message.content}
                 components={components}
@@ -133,7 +133,6 @@ function ChatMessages({ messages, status, selectedAgent }) {
               }
             })}
           </div>
-          <div className="text-xs text-gray-400 px-4"></div>
         </motion.div>
       ))}
       {status == 'submitted' && (

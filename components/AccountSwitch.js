@@ -19,19 +19,20 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-import { useAccount } from '@/context/AccountContext';
+import useAccountStore from '@/stores/accountStore';
 
 export default function AccountSwitcher({ accounts, className }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
 
-  const { setCurrentAccount, setAllAccounts } = useAccount();
+  const setCurrentAccount = useAccountStore((state) => state.setCurrentAccount);
+  const setAllAccounts = useAccountStore((state) => state.setAllAccounts);
 
   useEffect(() => {
     setCurrentAccount(accounts[0]);
     setAllAccounts(accounts);
-  }, [accounts]);
+  }, [accounts, setCurrentAccount, setAllAccounts]);
 
   return (
     <div className={className}>
@@ -46,7 +47,7 @@ export default function AccountSwitcher({ accounts, className }) {
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={selectedAccount.avatar}
+                src={selectedAccount?.avatar}
                 alt={selectedAccount.nombre}
               />
               <AvatarFallback>{selectedAccount.nombre[0]}</AvatarFallback>
