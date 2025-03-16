@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-// import { supabase } from '@/lib/supabaseClient';
 
 export const useUserStore = create()(
   persist(
