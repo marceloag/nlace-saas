@@ -5,8 +5,10 @@ import useAccountStore from '@/stores/accountStore';
 import ChatInput from '@/components/chat/ui/ChatInput';
 import ChatMessages from '@/components/chat/ui/ChatMessages';
 import { useChat } from '@ai-sdk/react';
+import { useUserStore } from '@/stores/userStore';
 
-function NewChat({ userId }) {
+function NewChat() {
+  const userId = useUserStore((state) => state.user.id);
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
     maxSteps: 5
   });
