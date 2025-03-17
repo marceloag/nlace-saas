@@ -8,7 +8,6 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import {
-  AddAccountIcon,
   ConfigurationIcon,
   DashboardIcon,
   LogoutIcon,
@@ -17,7 +16,9 @@ import {
 } from '@/components/icons/Icons';
 import { useUserStore } from '@/stores/userStore';
 
-function SideMenu({ userData, permisos }) {
+function SideMenu() {
+  const userData = useUserStore((state) => state.user);
+  const permisos = useUserStore((state) => state.permisos);
   const logoutStore = useUserStore((state) => state.logoutStore);
 
   const handleLogout = async () => {
@@ -32,7 +33,7 @@ function SideMenu({ userData, permisos }) {
     <aside className="w-14 shadow-md h-screen flex flex-col gap-2 py-2 px-2 items-center justify-between bg-white fixed left-0 top-0 z-50">
       <figure className="rounded-full overflow-hidden border-[2px] border-solid border-pink-100 w-full">
         <img
-          src={userData.user_metadata.picture}
+          src={userData?.user.user_metadata.picture}
           className="aspect-square w-full"
           alt="Avatar"
         />
@@ -50,7 +51,7 @@ function SideMenu({ userData, permisos }) {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        {permisos.includes('0') && (
+        {permisos?.includes('0') && (
           <>
             <TooltipProvider>
               <Tooltip>

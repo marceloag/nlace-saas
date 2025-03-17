@@ -104,7 +104,6 @@ export async function getCurrentUser() {
 }
 
 export async function getUserDataAndPermissions() {
-  console.log('Obteniendo datos del usuario...');
   const { data: authUser, error: authError } = await supabase.auth.getUser();
 
   if (authError || !authUser) {
@@ -120,8 +119,6 @@ export async function getUserDataAndPermissions() {
 
   if (permissionsError) throw permissionsError;
 
-  console.log('Permisos:', permissionsData.permisos);
-  console.log('Permisos incluidos:', permissionsData.permisos.includes(0));
   const { data: accountsData, error: accountsError } =
     permissionsData.permisos.includes('0')
       ? await supabase.from('cuentas').select()
@@ -132,7 +129,7 @@ export async function getUserDataAndPermissions() {
   if (accountsError) throw accountsError;
 
   return {
-    user: { id: authUser.user.id, email: authUser.user.email },
+    user: { ...authUser },
     permisos: permissionsData.permisos,
     accounts: accountsData
   };
