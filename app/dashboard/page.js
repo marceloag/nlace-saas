@@ -26,12 +26,12 @@ export default function PrivatePage() {
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     }
 
     !user ? fetchData() : setLoading(false);
-  }, []);
+  }, [user, setUser, setUserAccounts, setPermisos]);
 
   if (loading) {
     return (
