@@ -73,6 +73,10 @@ function ChatMessages({ messages, status, selectedAgent }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', delay: 100 });
   }, [messages, status]);
 
+  const handleSave = () => {
+    console.log('Guardando...');
+  };
+
   return (
     <div
       id="mensajes"
