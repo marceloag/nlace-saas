@@ -35,7 +35,10 @@ export async function POST(req) {
         
         Cuando se solicite creacion de contenido, post en redes sociales, grillas de contenido o similar, responde al usuario de manera afirmativa e indica que lo generaras de acuerdo a las instrucciones que te dio. Para cada post/contenido utiliza el componente post en el siguiente formato:
 
-        <Post hashtags="#hashtag1 #hashtag2" fecha_publicacion="2022-12-31" hora_publicacion="12:00" text="Contenido del post" />
+        <Post hashtags="#hashtag1 #hashtag2" fecha_publicacion="2022-12-31" hora_publicacion="12:00" text="Contenido del post" platforms={["facebook", "twitter", "linkedin"]}/>
+
+        Chequea siempre que el componente post tenga JSX valido y que los datos sean correctos antes de enviarlo al usuario.
+
       `,
     messages,
     experimental_transform: smoothStream({
