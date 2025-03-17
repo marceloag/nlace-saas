@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import NewChat from '@/components/chat/newChat';
 import { getUserDataAndPermissions } from '@/app/actions/usuarios';
 import { useUserStore } from '@/stores/userStore';
+import Loading from '@/components/ui/Loading';
 import AccountSwitcher from '@/components/AccountSwitch';
 
 export default function PrivatePage() {
@@ -25,16 +26,22 @@ export default function PrivatePage() {
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     }
 
     !user ? fetchData() : setLoading(false);
   }, []);
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (loading) {
+    return (
+      <div className="grid place-items-center h-screen w-full">
+        <div>
+          <Loading />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
