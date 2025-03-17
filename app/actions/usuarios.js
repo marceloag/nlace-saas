@@ -103,38 +103,6 @@ export async function getCurrentUser() {
   return userData;
 }
 
-export async function getUserDataAndPermissions() {
-  const { data: authUser, error: authError } = await supabase.auth.getUser();
-
-  if (authError || !authUser) {
-    throw new Error('No user is logged in');
-  }
-
-  // 1. Obtener los permisos del usuario desde la tabla "usuarios"
-  const { data: permissionsData, error: permissionsError } = await supabase
-    .from('usuarios')
-    .select('permisos')
-    .eq('email', authUser.user.email)
-    .single();
-
-  if (permissionsError) throw permissionsError;
-
-  const { data: accountsData, error: accountsError } =
-    permissionsData.permisos.includes('0')
-      ? await supabase.from('cuentas').select()
-      : await supabase.rpc('get_accounts_by_permissions', {
-          permission_ids: permissionsData.permisos
-        });
-
-  if (accountsError) throw accountsError;
-
-  return {
-    user: { ...authUser },
-    permisos: permissionsData.permisos,
-    accounts: accountsData
-  };
-}
-
 export async function fetchUserData() {
   try {
     const [userData, permisos, accounts] = await Promise.all([
