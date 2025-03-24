@@ -73,4 +73,6 @@ model usuarios {
   nombre     String
   email      String   @db.VarChar
   permisos   String[] @default([])
+
+  @@index([email], map: "idx_email")
 }

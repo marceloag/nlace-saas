@@ -117,7 +117,7 @@ export default function Post({
   };
 
   return (
-    <Card className="w-auto border-2 shadow-md hover:shadow-md transition-shadow">
+    <Card className="w-auto border-2 shadow-md hover:shadow-md transition-shadow mb-2">
       <CardHeader className="pb-2 flex flex-row justify-between items-center pt-2 px-6">
         <div className="flex items-center space-x-2">
           <Calendar className="h-4 w-4 text-muted-foreground" />

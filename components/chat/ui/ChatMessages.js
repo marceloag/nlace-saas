@@ -8,6 +8,7 @@ import { MDXRemote } from 'next-mdx-remote';
 // ai sdk
 import { serialize } from 'next-mdx-remote/serialize';
 import Post from '@/components/Post';
+import Posts from '@/components/Posts';
 
 const components = {
   h1: (props) => {
@@ -19,6 +20,9 @@ const components = {
   },
   Post: (props) => {
     return <Post {...props} />;
+  },
+  Posts: (props) => {
+    return <Posts {...props} />;
   }
 };
 
