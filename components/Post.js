@@ -75,10 +75,8 @@ export default function Post({
 
   const handleSave = () => {
     setIsEditing(false);
-    console.log(postData);
     if (onSave) {
       onSave(postData);
-      console.log(postData);
     }
   };
 

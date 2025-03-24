@@ -10,6 +10,14 @@ function Posts({ posts }) {
   const [postsEditable, setPostsEditable] = useState(posts);
   const downloadCSV = useRef(null);
 
+  const updatePost = (index, updatedPost) => {
+    setPostsEditable((prevPosts) => {
+      const newPosts = [...prevPosts];
+      newPosts[index] = updatedPost;
+      return newPosts;
+    });
+  };
+
   const generateCSV = () => {
     const MetricoolFormat = [];
     postsEditable.map((post) => {
@@ -85,7 +93,11 @@ function Posts({ posts }) {
   return (
     <>
       {posts.map((post, index) => (
-        <Post key={index} {...post} />
+        <Post
+          key={index}
+          {...post}
+          onSave={(updatedPost) => updatePost(index, updatedPost)}
+        />
       ))}
       <button
         onClick={generateCSV}
