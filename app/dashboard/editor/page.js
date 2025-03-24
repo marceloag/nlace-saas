@@ -143,7 +143,7 @@ function Editor({ searchParams }) {
       ))}
       <button
         onClick={generateCSV}
-        className="block mx-auto bg-black text-white px-4 py-2 rounded-lg mt-4 flex flex-row gap-2 items-center justify-centero"
+        className="mx-auto bg-black text-white px-4 py-2 rounded-lg mt-4 flex flex-row gap-2 items-center justify-centero"
       >
         <MetricoolIcon></MetricoolIcon> Generar CSV
       </button>

@@ -41,7 +41,9 @@ function NewChat() {
               handleSubmit(event, {
                 body: {
                   userId,
-                  accountId: currentAccount.id
+                  accountId: currentAccount.id,
+                  promptAgente: currentAccount.prompt_agente,
+                  accountNombre: currentAccount.nombre
                 }
               });
             }}
