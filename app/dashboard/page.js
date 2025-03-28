@@ -31,7 +31,7 @@ export default function PrivatePage() {
           return;
         }
 
-        console.log('Verificando sesión...');
+        // console.log('Verificando sesión...');
         const {
           data: { session }
         } = await supabaseClient.auth.getSession();
