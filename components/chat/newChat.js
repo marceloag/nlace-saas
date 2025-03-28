@@ -1,15 +1,19 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useAccountStore from '@/stores/accountStore';
+import { useUserStore } from '@/stores/userStore';
 import ChatInput from '@/components/chat/ui/ChatInput';
 import ChatMessages from '@/components/chat/ui/ChatMessages';
 import { useChat } from '@ai-sdk/react';
-import { useUserStore } from '@/stores/userStore';
-import { set } from 'date-fns';
+import {
+  getConversationMessages,
+  getOrCreateConversation
+} from '@/app/actions/conversationActions';
 
 function NewChat() {
-  const userId = useUserStore((state) => state.user.id);
+  const userId = useUserStore((state) => state.user.user.id);
+  const [bdMessages, setBDMessages] = useState([]);
   const {
     messages,
     input,
@@ -18,19 +22,36 @@ function NewChat() {
     status,
     setMessages
   } = useChat({
-    maxSteps: 5
+    maxSteps: 5,
+    initialMessages: bdMessages
   });
+  const [conversationId, setConversationId] = useState(null);
 
   const currentAccount = useAccountStore((state) => state.currentAccount);
   const avatar = currentAccount?.avatar;
   const prevAccountRef = useRef();
 
   useEffect(() => {
-    if (prevAccountRef.current?.id === currentAccount?.id) {
-      return;
+    async function fetchMessages() {
+      if (prevAccountRef.current?.id === currentAccount?.id) {
+        return;
+      }
+      prevAccountRef.current = currentAccount;
+      const conversationIdGetter = await getOrCreateConversation(
+        userId,
+        currentAccount.id
+      );
+      setConversationId(conversationIdGetter);
+      const messagesSB = await getConversationMessages(conversationIdGetter);
+      // console.log('Mensajes obtenidos de la base de datos:', messagesSB);
+      if (messagesSB) {
+        setMessages(messagesSB);
+      } else {
+        setMessages([]);
+      }
     }
-    setMessages([]);
-    prevAccountRef.current = currentAccount;
+
+    fetchMessages();
   }, [currentAccount]);
 
   return (
@@ -52,7 +73,8 @@ function NewChat() {
                   userId,
                   accountId: currentAccount.id,
                   promptAgente: currentAccount.prompt_agente,
-                  accountNombre: currentAccount.nombre
+                  accountNombre: currentAccount.nombre,
+                  conversationId
                 }
               });
             }}
