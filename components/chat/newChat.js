@@ -69,13 +69,35 @@ function NewChat() {
             null,
             null
           );
+          console.log('Mensaje del asistente guardado correctamente');
+        } catch (error) {
+          console.error('Error al guardar el mensaje del asistente:', error);
+        }
+      };
+      if (status === 'ready' && lastAssistantMessage) {
+        saveAssistantResponse();
+      }
+    }
+    if (status === 'submitted') {
+      const lastUserMessage = messages
+        .filter((msg) => msg.role === 'user')
+        .pop()?.content;
+      const saveUserResponse = async () => {
+        try {
+          await saveMessage(
+            conversationId,
+            'user',
+            lastUserMessage,
+            null,
+            null
+          );
           console.log('Mensaje del usuario guardado correctamente');
         } catch (error) {
           console.error('Error al guardar el mensaje del usuario:', error);
         }
       };
-      if (status === 'ready' && lastAssistantMessage) {
-        saveAssistantResponse();
+      if (status === 'submitted' && lastUserMessage) {
+        saveUserResponse();
       }
     }
   }, [status]);

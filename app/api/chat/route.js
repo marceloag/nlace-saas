@@ -21,10 +21,6 @@ export async function POST(req) {
     .filter((msg) => msg.role === 'user')
     .pop()?.content;
   const system = systemPrompt(userId, accountId, promptAgente, accountNombre);
-  // Guardar Mensaje de Usuario
-  if (conversationId) {
-    saveMessage(conversationId, 'user', userMessage, null, null);
-  }
 
   const result = streamText({
     model: openai('gpt-4o-mini'),
@@ -33,14 +29,6 @@ export async function POST(req) {
     tools: [getKnowledgeBase],
     onFinish(result) {
       console.log(result.usage);
-      // console.log('---------RESULT-------', JSON.stringify(result, null, 2));
-      // saveMessage(
-      //   conversationId,
-      //   'assistant',
-      //   result.text,
-      //   result.usage,
-      //   result.finishReason
-      // );
     },
     onToolCall(tool, input) {
       console.log('Tool:', tool.name, 'Input:', input);

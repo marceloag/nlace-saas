@@ -11,7 +11,12 @@ function ChatInput(props) {
   const [model, setModel] = useState('4o');
 
   const handleKeyDown = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (
+      (e.metaKey || e.ctrlKey) &&
+      e.key === 'Enter' &&
+      !isLoading &&
+      props.input.trim()
+    ) {
       e.preventDefault(); // Evita el salto de línea en el textarea
       props.handleSubmit(); // Envía el mensaje
     }
