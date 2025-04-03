@@ -37,7 +37,8 @@ export async function getConversationMessages(conversationId) {
     .from('messages')
     .select('id, sender, content, created_at')
     .eq('conversation_id', conversationId)
-    .order('created_at', { ascending: true });
+    .order('created_at', { ascending: true })
+    .limit(20);
 
   if (error) {
     console.error('Error fetching messages:', error);
