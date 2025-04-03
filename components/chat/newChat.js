@@ -8,7 +8,8 @@ import ChatMessages from '@/components/chat/ui/ChatMessages';
 import { useChat } from '@ai-sdk/react';
 import {
   getConversationMessages,
-  getOrCreateConversation
+  getOrCreateConversation,
+  saveMessage
 } from '@/app/actions/conversationActions';
 
 function NewChat() {
@@ -53,6 +54,31 @@ function NewChat() {
 
     fetchMessages();
   }, [currentAccount]);
+
+  useEffect(() => {
+    if (status === 'ready') {
+      const lastAssistantMessage = messages
+        .filter((msg) => msg.role === 'assistant')
+        .pop()?.content;
+      const saveAssistantResponse = async () => {
+        try {
+          await saveMessage(
+            conversationId,
+            'assistant',
+            lastAssistantMessage,
+            null,
+            null
+          );
+          console.log('Mensaje del usuario guardado correctamente');
+        } catch (error) {
+          console.error('Error al guardar el mensaje del usuario:', error);
+        }
+      };
+      if (status === 'ready' && lastAssistantMessage) {
+        saveAssistantResponse();
+      }
+    }
+  }, [status]);
 
   return (
     <>
