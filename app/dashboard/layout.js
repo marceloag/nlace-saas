@@ -7,7 +7,7 @@ export default async function DashboardLayout({ children }) {
       <SideMenu />
       <main className="flex flex-1 flex-col ml-9 min-h-screen">
         <Header />
-        <div className="flex flex-1 flex-col w-full justify-start h-[100%] relative">
+        <div className="flex flex-1 flex-col w-full justify-start h-[80%] relative">
           {children}
         </div>
       </main>

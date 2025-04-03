@@ -11,9 +11,9 @@ function ChatInput(props) {
   const [model, setModel] = useState('4o');
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault(); // Evita el salto de línea en el textarea
+      props.handleSubmit(); // Envía el mensaje
     }
   };
 
@@ -44,7 +44,7 @@ function ChatInput(props) {
             className="bg-gray-50 border-gray-200"
           />
 
-          <Button
+          {/* <Button
             type="button"
             variant="outline"
             size="icon"
@@ -79,7 +79,7 @@ function ChatInput(props) {
             disabled={isLoading}
           >
             <SearchCode className="h-4 w-4" />
-          </Button>
+          </Button> */}
         </div>
       </form>
     </div>
