@@ -113,6 +113,13 @@ module.exports = {
           700: '#a03c2d',
           800: '#6b281e',
           900: '#361410'
+        },
+        brand: {
+          blue: '#5869f7',
+          pink: '#f76dee',
+          dark: '#0f1011',
+          light: '#ffffff',
+          orange: '#fc624b'
         }
       },
       borderRadius: {
