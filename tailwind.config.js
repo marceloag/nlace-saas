@@ -8,9 +8,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)']
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+
+        electricBlue: '#5869f7',
+        bubblegumPink: '#f76dee',
+        graphiteBlack: '#0f1011',
+        pureWhite: '#ffffff',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
@@ -61,6 +69,50 @@ module.exports = {
           800: '#0a712c',
           900: '#0a5d27',
           950: '#003412'
+        },
+        azulElectrico: {
+          100: '#d7dbfe',
+          200: '#afb7fd',
+          300: '#8893fb',
+          400: '#606ff9',
+          500: '#5869f7', // base
+          600: '#3f51d4',
+          700: '#2f3da1',
+          800: '#20296e',
+          900: '#10143b'
+        },
+        rosadoChicle: {
+          100: '#fde1f7',
+          200: '#fac4ef',
+          300: '#f7a7e7',
+          400: '#f489df',
+          500: '#f76dee', // base
+          600: '#d055c6',
+          700: '#a3449b',
+          800: '#763370',
+          900: '#492245'
+        },
+        negroGrafito: {
+          100: '#d6d6d7',
+          200: '#adadaf',
+          300: '#848487',
+          400: '#5b5b5f',
+          500: '#0f1011', // base
+          600: '#0d0e0f',
+          700: '#0b0b0c',
+          800: '#09090a',
+          900: '#070707'
+        },
+        rojoCoral: {
+          100: '#ffe0db',
+          200: '#ffc1b7',
+          300: '#ffa393',
+          400: '#ff846e',
+          500: '#fc624b', // base
+          600: '#d54f3b',
+          700: '#a03c2d',
+          800: '#6b281e',
+          900: '#361410'
         }
       },
       borderRadius: {
