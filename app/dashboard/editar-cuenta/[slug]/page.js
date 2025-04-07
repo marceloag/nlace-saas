@@ -96,7 +96,7 @@ export default function EditarCuenta() {
       <Card className="w-full max-w-2xl mx-auto">
         <Toaster position="bottom-center" richColors />
         <CardHeader>
-          <CardTitle>📝 Editar Cuenta</CardTitle>
+          <CardTitle className="title">📝 Editar Cuenta</CardTitle>
         </CardHeader>
         <CardContent>
           <form

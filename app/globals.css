@@ -2,18 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .mensajecontent ol li {
-  margin-bottom: 1em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
 }
-
-.mensajecontent p:not(:first-child) {
-  margin-top: 1em;
+.title {
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
 }
-
-.mensajeconten hr {
-  display: none;
-} */
-
 .card {
   /* color used to softly clip top and bottom of the .words container */
   padding: 1rem 2rem;

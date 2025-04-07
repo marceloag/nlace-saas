@@ -5,7 +5,7 @@ import { systemPrompt } from '@/lib/constants/prompts';
 // SUPABASE
 import { saveMessage } from '@/app/api/chat/actions';
 
-export const maxDuration = 30;
+export const maxDuration = 45;
 
 export async function POST(req) {
   const {

@@ -16,7 +16,7 @@ async function Cuentas() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle className="items-start justify-start flex flex-row">
+        <CardTitle className="items-start justify-start flex flex-row title">
           🤖 Agentes
         </CardTitle>
       </CardHeader>

@@ -76,7 +76,9 @@ export default function CrearCuenta() {
       <Card className="w-full max-w-2xl mx-auto">
         <Toaster position="bottom-center" richColors />
         <CardHeader>
-          <CardTitle>⭐ Crear Nueva Cuenta {isLoading}</CardTitle>
+          <CardTitle className="title">
+            ⭐ Crear Nueva Cuenta {isLoading}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form

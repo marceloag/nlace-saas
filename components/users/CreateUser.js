@@ -1,11 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { createAccount, getAccounts } from '../../app/actions/usuarios';
+import { AlertCircle } from 'lucide-react';
 
 export default function UserForm() {
   const [accounts, setAccounts] = useState([]);
@@ -115,7 +117,7 @@ export default function UserForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Crear Nuevo Usuario</CardTitle>
+        <CardTitle className="title">Crear Nuevo Usuario</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">

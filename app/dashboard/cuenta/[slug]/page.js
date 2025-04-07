@@ -33,7 +33,7 @@ export default async function PerfilCuenta({ params }) {
           height={32}
           className="rounded-full"
         />
-        <CardTitle>{data.nombre}</CardTitle>
+        <CardTitle className="title">{data.nombre}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <p>{data.website}</p>

@@ -132,7 +132,9 @@ export default function EditUser({ userId }) {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Editar Usuario {userData.nombre}</CardTitle>
+        <CardTitle className="title">
+          Editar Usuario {userData.nombre}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {loading && <p>Cargando...</p>}
