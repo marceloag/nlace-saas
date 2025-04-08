@@ -17,7 +17,6 @@ export async function POST(req) {
     conversationId
   } = await req.json();
 
-  console.log('Route accountId:', accountId);
   const userMessage = messages
     .filter((msg) => msg.role === 'user')
     .pop()?.content;

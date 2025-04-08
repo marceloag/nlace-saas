@@ -53,6 +53,7 @@ function NewChat() {
     }
 
     fetchMessages();
+    console.log(currentAccount?.id);
   }, [currentAccount]);
 
   useEffect(() => {
