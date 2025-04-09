@@ -45,21 +45,21 @@ export async function updateAccount(formData, userId) {
   const emailUsuario = formData.email;
   const permisosUsuario = formData.selectedAccounts;
   const supabase = await createClient();
-  console.log(userId);
-  console.log(formData);
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('usuarios')
     .update({
       nombre: nombreUsuario,
       email: emailUsuario,
       permisos: permisosUsuario
     })
-    .eq('id', userId);
+    .eq('id', parseInt(userId))
+    .select();
+  // console.log('Datos actualizados:', data);
   if (error) {
     console.error('Error al actualizar cuenta:', error);
     return { error: true, message: error.message };
   }
-  return { success: true };
+  return { success: true, data };
 }
 
 export async function downloadFile(fileName) {
