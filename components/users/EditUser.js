@@ -12,6 +12,7 @@ import {
   getAccounts,
   getUser
 } from '../../app/actions/usuarios';
+import { Toaster, toast } from 'sonner';
 
 export default function EditUser({ userId }) {
   const [userData, setUserData] = useState({});
@@ -113,13 +114,7 @@ export default function EditUser({ userId }) {
 
     try {
       await updateAccount(formData, userId);
-      // setFormData({
-      //   name: '',
-      //   email: '',
-      //   selectedAccounts: []
-      // });
-      // Revalidar path para obtener los usuarios actualizados
-      console.log('Usuario actualizado');
+      toast.success('Usuario actualizado');
     } catch (error) {
       console.log(error);
       setErrors((prev) => ({
@@ -137,6 +132,7 @@ export default function EditUser({ userId }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        <Toaster />
         {loading && <p>Cargando...</p>}
         {!loading && (
           <form onSubmit={handleSubmit} className="space-y-6">
