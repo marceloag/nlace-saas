@@ -27,10 +27,11 @@ function NewChat() {
     initialMessages: bdMessages
   });
   const [conversationId, setConversationId] = useState(null);
-
   const currentAccount = useAccountStore((state) => state.currentAccount);
   const avatar = currentAccount?.avatar;
   const prevAccountRef = useRef();
+  const [isLoading, setIsLoading] = useState(true);
+  const lastUserMessageSavedRef = useRef(null);
 
   useEffect(() => {
     async function fetchMessages() {
@@ -54,6 +55,24 @@ function NewChat() {
 
     fetchMessages();
     console.log(currentAccount?.id);
+  }, [currentAccount]);
+
+  useEffect(() => {
+    async function initializeChat() {
+      setIsLoading(true);
+      if (!currentAccount?.id) {
+        console.log('Esperando cuenta...');
+        return;
+      }
+      // ... resto del código
+      setIsLoading(false);
+    }
+
+    initializeChat();
+    console.log('Current Account State:', {
+      id: currentAccount?.id,
+      nombre: currentAccount?.nombre
+    });
   }, [currentAccount]);
 
   useEffect(() => {
@@ -83,22 +102,26 @@ function NewChat() {
       const lastUserMessage = messages
         .filter((msg) => msg.role === 'user')
         .pop()?.content;
-      const saveUserResponse = async () => {
-        try {
-          await saveMessage(
-            conversationId,
-            'user',
-            lastUserMessage,
-            null,
-            null
-          );
-          console.log('Mensaje del usuario guardado correctamente');
-        } catch (error) {
-          console.error('Error al guardar el mensaje del usuario:', error);
+
+      if (lastUserMessageSavedRef.current != lastUserMessage) {
+        const saveUserResponse = async () => {
+          try {
+            await saveMessage(
+              conversationId,
+              'user',
+              lastUserMessage,
+              null,
+              null
+            );
+            console.log('Mensaje del usuario guardado correctamente');
+            lastUserMessageSavedRef.current = lastUserMessage;
+          } catch (error) {
+            console.error('Error al guardar el mensaje del usuario:', error);
+          }
+        };
+        if (status === 'submitted' && lastUserMessage) {
+          saveUserResponse();
         }
-      };
-      if (status === 'submitted' && lastUserMessage) {
-        saveUserResponse();
       }
     }
   }, [status]);
@@ -127,6 +150,12 @@ function NewChat() {
                 }
               });
             }}
+            disabled={isLoading || !currentAccount?.id}
+            placeholder={
+              !currentAccount?.id
+                ? 'Seleccione una cuenta para continuar...'
+                : 'Escriba su mensaje...'
+            }
           />
         </div>
       </main>

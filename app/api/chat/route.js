@@ -3,7 +3,6 @@ import { streamText } from 'ai';
 import { getKnowledgeBase } from '@/lib/ai/tools/getKnowledgeBase';
 import { systemPrompt } from '@/lib/constants/prompts';
 // SUPABASE
-import { saveMessage } from '@/app/api/chat/actions';
 
 export const maxDuration = 45;
 
