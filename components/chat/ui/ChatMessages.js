@@ -104,12 +104,12 @@ function ChatMessages({ messages, status, selectedAgent }) {
           </p>
         </div>
       )}
-      {messages.map((message) => (
+      {messages.map((message, id) => (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          key={message.id}
+          key={message.id || id}
           className={`relative flex flex-col items-start ${
             message.role === 'user' ? 'items-end' : ''
           }`}
