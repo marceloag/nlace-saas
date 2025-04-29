@@ -1,3 +1,5 @@
+const { opacity } = require('styled-system');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -186,6 +188,17 @@ module.exports = {
             opacity: '1'
           }
         },
+        skeletonpulse: {
+          '0%': {
+            opacity: '0.5'
+          },
+          '50%': {
+            opacity: '1'
+          },
+          '100%': {
+            opacity: '0.5'
+          }
+        },
         marquee: {
           '0%': {
             transform: 'translateX(0)'
@@ -211,6 +224,7 @@ module.exports = {
         'slide-in-right': 'slide-in-right 0.3s ease-out',
         'slide-out-left': 'slide-out-left 0.3s ease-out',
         'scale-in': 'scale-in 0.2s ease-out',
+        skeletonpulse: 'skeletonpulse 1.5s ease-in-out infinite',
         marquee: 'marquee 25s linear infinite',
         marquee2: 'marquee 25s linear infinite'
       }

@@ -4,25 +4,20 @@ import { useRef, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { MessageSquarePlus } from 'lucide-react';
 import Loading from '@/components/ui/Loading';
+// MDX
 import { MDXRemote } from 'next-mdx-remote';
-// ai sdk
 import { serialize } from 'next-mdx-remote/serialize';
-import Post from '@/components/Post';
-import Posts from '@/components/Posts';
+// tools components
+import Posts from '@/components/tools/Posts';
+import Weather from '@/components/tools/Weather';
 
 const components = {
   h1: (props) => {
     return (
-      <h1 className=" text-violet-600 dark:text-violet-400 text-3xl font-bold mt-4 mb-2">
+      <h1 className=" text-gray-600 dark:text-gray-200 text-3xl font-bold mt-4 mb-2">
         {props.children}
       </h1>
     );
-  },
-  Post: (props) => {
-    return <Post {...props} />;
-  },
-  Posts: (props) => {
-    return <Posts {...props} />;
   }
 };
 
@@ -86,6 +81,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
       id="mensajes"
       className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7 no-scrollbar"
     >
+      <span className="absolute bottom-0">Current Status: {status}</span>
       {messages && messages.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full p-6 text-center">
           <div className="w-32 h-32 bg-apple-50 rounded-full flex items-center justify-center mb-6 shadow-md">
@@ -104,6 +100,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
           </p>
         </div>
       )}
+
       {messages.map((message, id) => (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -115,47 +112,75 @@ function ChatMessages({ messages, status, selectedAgent }) {
           }`}
         >
           <div
-            className={`prose prose-sm max-w-[80%] mensajecontent rounded-2xl p-4 m-2 drop-shadow-sm bg-[#F1F5F9] ${
-              message.role == 'user'
+            className={`prose prose-sm max-w-[80%] mensajecontent rounded-2xl px-4 m-2 drop-shadow-sm bg-[#F1F5F9] ${
+              message.role === 'user'
                 ? 'bg-apple-700 text-white'
                 : 'bg-[#F1F5F9] text-gray-700 max-w-[60%]'
             }`}
           >
-            {message.content && message.content.length > 0 && (
-              <MessageContent
-                content={message.content}
-                components={components}
-              />
-            )}
+            {message.parts?.map((part, index) => {
+              // console.log('Part:', part);
+              const { type } = part;
+              if (type === 'text') {
+                return (
+                  <div key={index} id="Text">
+                    <MessageContent content={part.text} />
+                  </div>
+                );
+              }
 
-            {message.parts.map((part) => {
-              if (part.type === 'tool-invocation') {
-                switch (part.toolInvocation.state) {
-                  case 'partial-call':
-                    return <>render partial tool call</>;
-                  case 'call':
-                    return <>🧠 Consultando a la base de conocimiento</>;
-                  case 'result':
-                    return <></>;
+              if (type === 'tool-invocation') {
+                const { toolInvocation } = part;
+                const { toolName, toolCallId, state } = toolInvocation;
+                if (state === 'partial-call') {
+                  console.log('Partial Tool invocation:', toolName);
+                  return (
+                    <div key={toolCallId} id="ToolCall">
+                      {toolName === 'generatePosts' && <Posts />}
+                    </div>
+                  );
+                }
+                if (state === 'call') {
+                  console.log('Tool invocation:', toolInvocation);
+                  return (
+                    <div key={toolCallId} id="ToolCall">
+                      {/* {toolName} */}
+                      {toolName === 'generatePosts' && <Posts />}
+                    </div>
+                  );
+                }
+                if (state === 'result') {
+                  const { result, toolName, toolCallId, state } =
+                    toolInvocation;
+                  return (
+                    <div key={toolCallId} id="ToolResult" className="mt-4">
+                      {toolName === 'getWeather' && (
+                        <Weather weatherAtLocation={result} />
+                      )}
+                      {toolName === 'generatePosts' && <Posts posts={result} />}
+                    </div>
+                  );
                 }
               }
             })}
           </div>
         </motion.div>
       ))}
-      {status == 'submitted' && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex flex-row items-start justify-start h-auto mb-10 gap-6"
-        >
-          <div className="mensajecontent bg-white rounded-2xl p-4 m-2 drop-shadow-sm ">
-            <Loading />
-          </div>
-        </motion.div>
-      )}
-      <div ref={messagesEndRef}></div>
+      {status === 'submitted' &&
+        messages.length > 0 &&
+        messages[messages.length - 1].role === 'user' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-row items-start justify-start h-auto mb-10 gap-6"
+          >
+            <div className="mensajecontent bg-white rounded-2xl p-4 m-2 drop-shadow-sm ">
+              <Loading />
+            </div>
+          </motion.div>
+        )}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

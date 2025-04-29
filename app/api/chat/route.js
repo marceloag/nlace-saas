@@ -1,6 +1,8 @@
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { getKnowledgeBase } from '@/lib/ai/tools/getKnowledgeBase';
+import { getWeather } from '@/lib/ai/tools/getWeather';
+import { generatePosts } from '@/lib/ai/tools/generatePosts';
 import { systemPrompt } from '@/lib/constants/prompts';
 // SUPABASE
 
@@ -20,14 +22,18 @@ export async function POST(req) {
     .filter((msg) => msg.role === 'user')
     .pop()?.content;
   const system = systemPrompt(userId, accountId, promptAgente, accountNombre);
+  // const system = `You are a friendly assistant! Keep your responses concise and helpful.`;
 
   const result = streamText({
     model: openai('gpt-4o-mini'),
     system,
     messages,
-    tools: [getKnowledgeBase],
-    onFinish(result) {
-      console.log(result.usage);
+    tools: { getKnowledgeBase, getWeather, generatePosts },
+    toolCallStreaming: true,
+    maxSteps: 5,
+    onFinish: async ({ response }) => {
+      console.log(response.usage);
+      console.log(JSON.stringify(response, null, 2));
     },
     onToolCall(tool, input) {
       console.log('Tool:', tool.name, 'Input:', input);

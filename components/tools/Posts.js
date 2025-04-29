@@ -1,14 +1,18 @@
 'use client';
 import { useState, useRef } from 'react';
-import Post from '@/components/Post';
+import Post from '@/components/tools/Post';
+import PostSkeleton from '@/components/tools/PostSkeleton';
 import { usePapaParse } from 'react-papaparse';
 import { MetricoolIcon } from '@/components/icons/Icons';
-import { Button } from '@/components/ui/button';
 
 function Posts({ posts }) {
   const { jsonToCSV } = usePapaParse();
-  const [postsEditable, setPostsEditable] = useState(posts);
+  const [postsEditable, setPostsEditable] = useState(posts || []);
   const downloadCSV = useRef(null);
+
+  if (!posts || posts.length === 0) {
+    return <PostSkeleton />;
+  }
 
   const updatePost = (index, updatedPost) => {
     setPostsEditable((prevPosts) => {
@@ -103,9 +107,10 @@ function Posts({ posts }) {
         onClick={generateCSV}
         className="mx-auto bg-black text-white px-4 py-2 rounded-lg mt-4 flex flex-row gap-2 items-center justify-centero"
       >
-        <MetricoolIcon></MetricoolIcon> Generar CSV
+        <MetricoolIcon />
+        Generar CSV
       </button>
-      <a ref={downloadCSV} className=" hidden"></a>
+      <a ref={downloadCSV} className="hidden" />
     </>
   );
 }

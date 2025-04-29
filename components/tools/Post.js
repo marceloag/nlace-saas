@@ -124,7 +124,10 @@ export default function Post({
               type="date"
               value={postData.fecha_publicacion}
               onChange={(e) =>
-                setPostData({ ...postData, fecha_publicacion: e.target.value })
+                setPostData({
+                  ...postData,
+                  fecha_publicacion: e.target.value
+                })
               }
               className="h-8 w-auto"
             />
