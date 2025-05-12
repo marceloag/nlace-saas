@@ -10,6 +10,8 @@ import { serialize } from 'next-mdx-remote/serialize';
 // tools components
 import Posts from '@/components/tools/Posts';
 import Weather from '@/components/tools/Weather';
+import ChartGen from '@/components/tools/ChartGen';
+// TEST CHART
 
 const components = {
   h1: (props) => {
@@ -76,12 +78,37 @@ function ChatMessages({ messages, status, selectedAgent }) {
     console.log('Guardando...');
   };
 
+  const defaultData = [
+    {
+      key: 'Coca-Cola',
+      value: 1500000000
+    },
+    {
+      key: 'Pepsi',
+      value: 1200000000
+    },
+    {
+      key: 'Sprite',
+      value: 800000000
+    },
+    {
+      key: 'Dr Pepper',
+      value: 600000000
+    },
+    {
+      key: 'Fanta',
+      value: 500000000
+    }
+  ];
+
   return (
     <div
       id="mensajes"
       className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7 no-scrollbar"
     >
-      <span className="absolute bottom-0">Current Status: {status}</span>
+      <span className="absolute bottom-0 text-xs">
+        Current Status: {status}
+      </span>
       {messages && messages.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full p-6 text-center">
           <div className="w-32 h-32 bg-apple-50 rounded-full flex items-center justify-center mb-6 shadow-md">
@@ -158,6 +185,16 @@ function ChatMessages({ messages, status, selectedAgent }) {
                         <Weather weatherAtLocation={result} />
                       )}
                       {toolName === 'generatePosts' && <Posts posts={result} />}
+                      {toolName === 'generateChart' && (
+                        <ChartGen
+                          data={result.data}
+                          indexKey="key"
+                          valueKeys={result.valueKeys}
+                          title={result.title}
+                          orientation={result.orientation}
+                          colors={result.colors}
+                        />
+                      )}
                     </div>
                   );
                 }

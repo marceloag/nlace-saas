@@ -3,6 +3,7 @@ import { streamText } from 'ai';
 import { getKnowledgeBase } from '@/lib/ai/tools/getKnowledgeBase';
 import { getWeather } from '@/lib/ai/tools/getWeather';
 import { generatePosts } from '@/lib/ai/tools/generatePosts';
+import { generateChart } from '@/lib/ai/tools/generateChart';
 import { systemPrompt } from '@/lib/constants/prompts';
 // SUPABASE
 
@@ -28,9 +29,10 @@ export async function POST(req) {
     model: openai('gpt-4o-mini'),
     system,
     messages,
-    tools: { getKnowledgeBase, getWeather, generatePosts },
+    tools: { getKnowledgeBase, getWeather, generatePosts, generateChart },
     toolCallStreaming: true,
     maxSteps: 5,
+    experimental_telemetry: { isEnabled: true },
     onFinish: async ({ response }) => {
       console.log(response.usage);
       console.log(JSON.stringify(response, null, 2));

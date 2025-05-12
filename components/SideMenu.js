@@ -12,7 +12,8 @@ import {
   DashboardIcon,
   LogoutIcon,
   AccountsIcon,
-  RobotIcon
+  RobotIcon,
+  ChatIcon
 } from '@/components/icons/Icons';
 import { useUserStore } from '@/stores/userStore';
 
@@ -62,6 +63,16 @@ function SideMenu() {
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>Agentes</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link href="/dashboard/chat">
+                    <ChatIcon />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>Chat</TooltipContent>
               </Tooltip>
             </TooltipProvider>
             <TooltipProvider>
