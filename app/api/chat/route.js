@@ -1,5 +1,9 @@
 import { openai } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import {
+  streamText,
+  experimental_createMCPClient as createMCPClient
+} from 'ai';
+import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import { getKnowledgeBase } from '@/lib/ai/tools/getKnowledgeBase';
 import { getWeather } from '@/lib/ai/tools/getWeather';
 import { generatePosts } from '@/lib/ai/tools/generatePosts';
@@ -19,6 +23,15 @@ export async function POST(req) {
     conversationId
   } = await req.json();
 
+  const mcpClient = await createMCPClient({
+    transport: new StdioMCPTransport({
+      command: 'node',
+      args: ['server/route.mjs']
+    })
+  });
+
+  const tools = await mcpClient.tools();
+
   const userMessage = messages
     .filter((msg) => msg.role === 'user')
     .pop()?.content;
@@ -29,11 +42,11 @@ export async function POST(req) {
     model: openai('gpt-4o-mini'),
     system,
     messages,
-    tools: { getKnowledgeBase, getWeather, generatePosts, generateChart },
     toolCallStreaming: true,
     maxSteps: 5,
     experimental_telemetry: { isEnabled: true },
     onFinish: async ({ response }) => {
+      await mcpClient.close();
       console.log(response.usage);
       console.log(JSON.stringify(response, null, 2));
     },
