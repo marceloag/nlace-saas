@@ -1,70 +1,61 @@
 // app/dashboard/page.js
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
-import { getUserDataAndPermissionsClient } from '@/app/actions/userClientActions';
-import { useUserStore } from '@/stores/userStore';
-import NewChat from '@/components/chat/newChat';
-import Loading from '@/components/ui/Loading';
-import AccountSwitcher from '@/components/AccountSwitch';
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/utils/supabase/client'
+import { getUserDataAndPermissionsClient } from '@/app/actions/userClientActions'
+import { useUserStore } from '@/stores/userStore'
+import NewChat from '@/components/chat/newChat'
+import Loading from '@/components/ui/Loading'
+import AccountSwitcher from '@/components/AccountSwitch'
 
 export default function PrivatePage() {
-  const supabaseClient = createClient();
-  const router = useRouter();
-  const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser);
-  const userAccounts = useUserStore((state) => state.accounts);
-  const setUserAccounts = useUserStore((state) => state.setAccounts);
-  const setPermisos = useUserStore((state) => state.setPermisos);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const supabaseClient = createClient()
+  const router = useRouter()
+  const user = useUserStore((state) => state.user)
+  const setUser = useUserStore((state) => state.setUser)
+  const userAccounts = useUserStore((state) => state.accounts)
+  const setUserAccounts = useUserStore((state) => state.setAccounts)
+  const setPermisos = useUserStore((state) => state.setPermisos)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
       try {
-        // Si ya tenemos un usuario en el store, no necesitamos hacer nada más
         if (user) {
           // console.log('Usuario ya en store:', user);
-          setLoading(false);
-          return;
+          setLoading(false)
+          return
         }
-
-        // console.log('Verificando sesión...');
         const {
           data: { session }
-        } = await supabaseClient.auth.getSession();
+        } = await supabaseClient.auth.getSession()
 
         if (!session) {
-          // console.log('No hay sesión activa, redirigiendo a login');
-          router.push('/login');
-          return;
+          router.push('/login')
+          return
         }
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        const userData = await getUserDataAndPermissionsClient()
 
-        // console.log('Sesión activa, obteniendo datos del usuario...');
-
-        // Pequeño retraso para asegurar que la sesión esté completamente establecida
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const userData = await getUserDataAndPermissionsClient();
-
-        setUser(userData.user);
-        setUserAccounts(userData.accounts);
-        setPermisos(userData.permisos);
+        setUser(userData.user)
+        setUserAccounts(userData.accounts)
+        setPermisos(userData.permisos)
       } catch (error) {
-        console.error('Error al inicializar:', error);
-        setError(error.message);
+        console.error('Error al inicializar:', error)
+        setError(error.message)
 
         if (error.message === 'No user is logged in') {
-          router.push('/login');
+          router.push('/login')
         }
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    checkAuthAndFetchData();
+    checkAuthAndFetchData()
 
     // Configurar el listener para cambios en la autenticación
     const {
@@ -73,19 +64,19 @@ export default function PrivatePage() {
       // console.log('Evento de autenticación:', event);
 
       if (event === 'SIGNED_IN') {
-        checkAuthAndFetchData();
+        checkAuthAndFetchData()
       } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-        setUserAccounts([]);
-        setPermisos([]);
-        router.push('/login');
+        setUser(null)
+        setUserAccounts([])
+        setPermisos([])
+        router.push('/login')
       }
-    });
+    })
 
     return () => {
-      subscription?.unsubscribe();
-    };
-  }, [router, setUser, setUserAccounts, setPermisos, user]);
+      subscription?.unsubscribe()
+    }
+  }, [router, setUser, setUserAccounts, setPermisos, user])
 
   if (loading) {
     return (
@@ -94,7 +85,7 @@ export default function PrivatePage() {
           <Loading />
         </div>
       </div>
-    );
+    )
   }
 
   if (error && error !== 'No user is logged in') {
@@ -110,7 +101,7 @@ export default function PrivatePage() {
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -123,5 +114,5 @@ export default function PrivatePage() {
       </header>
       {user && <NewChat />}
     </>
-  );
+  )
 }

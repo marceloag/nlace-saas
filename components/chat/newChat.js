@@ -1,20 +1,22 @@
-'use client';
+'use client'
 
-import { useEffect, useState, useRef } from 'react';
-import useAccountStore from '@/stores/accountStore';
-import { useUserStore } from '@/stores/userStore';
-import ChatInput from '@/components/chat/ui/ChatInput';
-import ChatMessages from '@/components/chat/ui/ChatMessages';
-import { useChat } from '@ai-sdk/react';
+import { useEffect, useState, useRef } from 'react'
+import useAccountStore from '@/stores/accountStore'
+import { useUserStore } from '@/stores/userStore'
+import ChatInput from '@/components/chat/ui/ChatInput'
+import ChatMessages from '@/components/chat/ui/ChatMessages'
+import { useChat } from '@ai-sdk/react'
 import {
   getConversationMessages,
   getOrCreateConversation,
   saveMessage
-} from '@/app/actions/conversationActions';
+} from '@/app/actions/conversationActions'
+// Multimodal
+import Image from 'next/image'
 
 function NewChat() {
-  const userId = useUserStore((state) => state.user.user.id);
-  const [bdMessages, setBDMessages] = useState([]);
+  const userId = useUserStore((state) => state.user.user.id)
+  const [bdMessages, setBDMessages] = useState([])
   const {
     messages,
     input,
@@ -25,13 +27,16 @@ function NewChat() {
   } = useChat({
     maxSteps: 5,
     initialMessages: bdMessages
-  });
-  const [conversationId, setConversationId] = useState(null);
-  const currentAccount = useAccountStore((state) => state.currentAccount);
-  const avatar = currentAccount?.avatar;
-  const prevAccountRef = useRef();
-  const [isLoading, setIsLoading] = useState(true);
-  const lastUserMessageSavedRef = useRef(null);
+  })
+  const [conversationId, setConversationId] = useState(null)
+  const currentAccount = useAccountStore((state) => state.currentAccount)
+  const avatar = currentAccount?.avatar
+  const prevAccountRef = useRef()
+  const [isLoading, setIsLoading] = useState(true)
+  const lastUserMessageSavedRef = useRef(null)
+  const fileInputRef = useRef()
+  //
+  const [files, setFiles] = useState()
 
   // useEffect(() => {
   //   async function fetchMessages() {
@@ -59,21 +64,21 @@ function NewChat() {
 
   useEffect(() => {
     async function initializeChat() {
-      setIsLoading(true);
+      setIsLoading(true)
       if (!currentAccount?.id) {
-        console.log('Esperando cuenta...');
-        return;
+        console.log('Esperando cuenta...')
+        return
       }
       // ... resto del código
-      setIsLoading(false);
+      setIsLoading(false)
     }
 
-    initializeChat();
+    initializeChat()
     console.log('Current Account State:', {
       id: currentAccount?.id,
       nombre: currentAccount?.nombre
-    });
-  }, [currentAccount]);
+    })
+  }, [currentAccount])
 
   // useEffect(() => {
   //   if (status === 'ready') {
@@ -138,9 +143,14 @@ function NewChat() {
           <ChatInput
             handleSubmit={handleSubmit}
             input={input}
+            files={files}
             handleIChange={handleInputChange}
+            setFiles={setFiles}
+            fileInputRef={fileInputRef}
             onSubmit={(event) => {
+              const options = files ? { experimental_attachments: files } : {}
               handleSubmit(event, {
+                experimental_attachments: files,
                 body: {
                   userId,
                   accountId: currentAccount.id,
@@ -148,7 +158,11 @@ function NewChat() {
                   accountNombre: currentAccount.nombre,
                   conversationId
                 }
-              });
+              })
+              setFiles('')
+              if (fileInputRef.current) {
+                fileInputRef.current.value = ''
+              }
             }}
             disabled={isLoading || !currentAccount?.id}
             placeholder={
@@ -160,7 +174,7 @@ function NewChat() {
         </div>
       </main>
     </>
-  );
+  )
 }
 
-export default NewChat;
+export default NewChat

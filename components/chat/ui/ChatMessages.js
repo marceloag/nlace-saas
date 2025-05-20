@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
-import { useRef, useEffect, useState } from 'react';
-import { motion } from 'motion/react';
-import { MessageSquarePlus } from 'lucide-react';
-import Loading from '@/components/ui/Loading';
+import { useRef, useEffect, useState } from 'react'
+import { motion } from 'motion/react'
+import { MessageSquarePlus } from 'lucide-react'
+import Loading from '@/components/ui/Loading'
 // MDX
-import { MDXRemote } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote } from 'next-mdx-remote'
+import { serialize } from 'next-mdx-remote/serialize'
 // tools components
-import Posts from '@/components/tools/Posts';
-import Weather from '@/components/tools/Weather';
-import ChartGen from '@/components/tools/ChartGen';
+import Posts from '@/components/tools/Posts'
+import Weather from '@/components/tools/Weather'
+import ChartGen from '@/components/tools/ChartGen'
 // TEST CHART
 
 const components = {
@@ -19,31 +19,31 @@ const components = {
       <h1 className=" text-gray-600 dark:text-gray-200 text-3xl font-bold mt-4 mb-2">
         {props.children}
       </h1>
-    );
+    )
   }
-};
+}
 
 function MdxContent({ content }) {
-  const [mdxSource, setMdxSource] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [mdxSource, setMdxSource] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const prepareMdx = async () => {
       try {
-        const serialized = await serialize(content);
-        setMdxSource(serialized);
+        const serialized = await serialize(content)
+        setMdxSource(serialized)
       } catch (error) {
-        console.error('Error serializing MDX:', error);
+        console.error('Error serializing MDX:', error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    prepareMdx();
-  }, [content]);
+    prepareMdx()
+  }, [content])
 
-  if (isLoading) return <p>Cargando...</p>;
-  if (!mdxSource) return <p>{content}</p>;
+  if (isLoading) return <p>Cargando...</p>
+  if (!mdxSource) return <p>{content}</p>
 
   return (
     <MDXRemote
@@ -51,7 +51,7 @@ function MdxContent({ content }) {
       className="prose-sm lg:prose-xl"
       components={components}
     />
-  );
+  )
 }
 
 function MessageContent({ content }) {
@@ -59,54 +59,31 @@ function MessageContent({ content }) {
     content.includes('#') ||
     content.includes('```') ||
     content.includes('**') ||
-    content.includes('<');
+    content.includes('<')
 
   if (isMdxLike) {
-    return <MdxContent content={content} />;
+    return <MdxContent content={content} />
   }
-  return <p>{content}</p>;
+  return <p>{content}</p>
 }
 
 function ChatMessages({ messages, status, selectedAgent }) {
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef(null)
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', delay: 100 });
-  }, [messages, status]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', delay: 100 })
+  }, [messages, status])
 
   const handleSave = () => {
-    console.log('Guardando...');
-  };
-
-  const defaultData = [
-    {
-      key: 'Coca-Cola',
-      value: 1500000000
-    },
-    {
-      key: 'Pepsi',
-      value: 1200000000
-    },
-    {
-      key: 'Sprite',
-      value: 800000000
-    },
-    {
-      key: 'Dr Pepper',
-      value: 600000000
-    },
-    {
-      key: 'Fanta',
-      value: 500000000
-    }
-  ];
+    console.log('Guardando...')
+  }
 
   return (
     <div
       id="mensajes"
       className="w-[90%] mx-auto flex flex-col flex-1 min-w-0 overflow-y-auto overscroll-contain max-h-[calc(100vh-250px)] pt-7 no-scrollbar"
     >
-      <span className="absolute bottom-0 text-xs">
+      <span className="absolute bottom-0 right-4 text-[.6em] text-gray-400">
         Current Status: {status}
       </span>
       {messages && messages.length === 0 && (
@@ -138,6 +115,21 @@ function ChatMessages({ messages, status, selectedAgent }) {
             message.role === 'user' ? 'items-end' : ''
           }`}
         >
+          {/* <div>
+            {message?.experimental_attachments
+              ?.filter((attachment) =>
+                attachment?.contentType?.startsWith('image/')
+              )
+              .map((attachment, index) => (
+                <Image
+                  key={`${message.id}-${index}`}
+                  src={attachment.url}
+                  width={500}
+                  height={500}
+                  alt={attachment.name ?? `attachment-${index}`}
+                />
+              ))}
+          </div> */}
           <div
             className={`prose prose-sm max-w-[80%] mensajecontent rounded-2xl px-4 m-2 drop-shadow-sm bg-[#F1F5F9] ${
               message.role === 'user'
@@ -147,38 +139,37 @@ function ChatMessages({ messages, status, selectedAgent }) {
           >
             {message.parts?.map((part, index) => {
               // console.log('Part:', part);
-              const { type } = part;
+              const { type } = part
               if (type === 'text') {
                 return (
                   <div key={index} id="Text">
                     <MessageContent content={part.text} />
                   </div>
-                );
+                )
               }
 
               if (type === 'tool-invocation') {
-                const { toolInvocation } = part;
-                const { toolName, toolCallId, state } = toolInvocation;
+                const { toolInvocation } = part
+                const { toolName, toolCallId, state } = toolInvocation
                 if (state === 'partial-call') {
-                  console.log('Partial Tool invocation:', toolName);
+                  console.log('Partial Tool invocation:', toolName)
                   return (
                     <div key={toolCallId} id="ToolCall">
                       {toolName === 'generatePosts' && <Posts />}
                     </div>
-                  );
+                  )
                 }
                 if (state === 'call') {
-                  console.log('Tool invocation:', toolInvocation);
+                  console.log('Tool invocation:', toolInvocation)
                   return (
                     <div key={toolCallId} id="ToolCall">
                       {/* {toolName} */}
                       {toolName === 'generatePosts' && <Posts />}
                     </div>
-                  );
+                  )
                 }
                 if (state === 'result') {
-                  const { result, toolName, toolCallId, state } =
-                    toolInvocation;
+                  const { result, toolName, toolCallId, state } = toolInvocation
                   return (
                     <div key={toolCallId} id="ToolResult" className="mt-4">
                       {toolName === 'getWeather' && (
@@ -196,7 +187,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
                         />
                       )}
                     </div>
-                  );
+                  )
                 }
               }
             })}
@@ -219,7 +210,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
         )}
       <div ref={messagesEndRef} />
     </div>
-  );
+  )
 }
 
-export default ChatMessages;
+export default ChatMessages
