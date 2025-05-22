@@ -170,6 +170,11 @@ function NewChat() {
                 ? 'Seleccione una cuenta para continuar...'
                 : 'Escriba su mensaje...'
             }
+            userID={userId}
+            accountId={currentAccount.id}
+            promptAgente={currentAccount.prompt_agente}
+            accountNombre={currentAccount.nombre}
+            conversationId={conversationId}
           />
         </div>
       </main>

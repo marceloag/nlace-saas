@@ -25,7 +25,20 @@ function ChatInput(props) {
       props.input.trim()
     ) {
       e.preventDefault() // Evita el salto de línea en el textarea
-      props.handleSubmit() // Envía el mensaje
+      props.handleSubmit(event, {
+        experimental_attachments: props.files,
+        body: {
+          userId: props.userId,
+          accountId: props.accountId,
+          promptAgente: props.promptAgente,
+          accountNombre: props.accountNombre,
+          conversationId: props.conversationId
+        }
+      })
+      props.setFiles('')
+      if (props.fileInputRef.current) {
+        props.fileInputRef.current.value = ''
+      }
     }
   }
 
