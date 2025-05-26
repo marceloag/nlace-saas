@@ -151,6 +151,7 @@ function ChatMessages({ messages, status, selectedAgent }) {
               if (type === 'tool-invocation') {
                 const { toolInvocation } = part
                 const { toolName, toolCallId, state } = toolInvocation
+                console.log('Tool State:', state)
                 if (state === 'partial-call') {
                   console.log('Partial Tool invocation:', toolName)
                   return (
@@ -165,10 +166,14 @@ function ChatMessages({ messages, status, selectedAgent }) {
                     <div key={toolCallId} id="ToolCall">
                       {/* {toolName} */}
                       {toolName === 'generatePosts' && <Posts />}
+                      {toolName === 'generateImages' && (
+                        <span>Image generated</span>
+                      )}
                     </div>
                   )
                 }
                 if (state === 'result') {
+                  console.log('Tool Result')
                   const { result, toolName, toolCallId, state } = toolInvocation
                   return (
                     <div key={toolCallId} id="ToolResult" className="mt-4">
@@ -185,6 +190,9 @@ function ChatMessages({ messages, status, selectedAgent }) {
                           orientation={result.orientation}
                           colors={result.colors}
                         />
+                      )}
+                      {toolName === 'generateImages' && (
+                        <pre>{JSON.stringify(result, null, 2)}</pre>
                       )}
                     </div>
                   )
