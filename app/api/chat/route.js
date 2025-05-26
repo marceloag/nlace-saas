@@ -5,7 +5,11 @@ import { getKnowledgeBase } from '@/lib/ai/tools/getKnowledgeBase'
 import { getWeather } from '@/lib/ai/tools/getWeather'
 import { generatePosts } from '@/lib/ai/tools/generatePosts'
 import { generateChart } from '@/lib/ai/tools/generateChart'
+import { generateImages } from '@/lib/ai/tools/generateImage'
 import { systemPrompt } from '@/lib/constants/prompts'
+// MCP
+import { experimental_createMCPClient as createMCPClient } from 'ai'
+import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio'
 // SUPABASE
 
 export const maxDuration = 45
@@ -19,6 +23,19 @@ export async function POST(req) {
     accountNombre,
     conversationId
   } = await req.json()
+
+  // MCP
+
+  const mcpClient = await createMCPClient({
+    transport: new StdioMCPTransport({
+      command: 'npx',
+      args: ['-y', '@enconvo/trello-mcp-server']
+    })
+  })
+
+  const tools = await mcpClient.tools()
+
+  // END MCP
 
   const messagesHavePDF = messages.some((message) =>
     message.experimental_attachments?.some(
@@ -38,13 +55,15 @@ export async function POST(req) {
       : openai('gpt-4o'),
     system,
     messages,
-    tools: { getKnowledgeBase, getWeather, generatePosts, generateChart },
+    tools,
     toolCallStreaming: true,
     maxSteps: 5,
     experimental_telemetry: { isEnabled: true },
     onFinish: async ({ response }) => {
       console.log(response.usage)
       console.log(JSON.stringify(response, null, 2))
+      // MCP
+      await mcpClient.close()
     },
     onToolCall(tool, input) {
       console.log('Tool:', tool.name, 'Input:', input)
