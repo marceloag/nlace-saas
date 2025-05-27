@@ -33,7 +33,7 @@ export async function POST(req) {
     })
   })
 
-  const tools = await mcpClient.tools()
+  const mcpTools = await mcpClient.tools()
 
   // END MCP
 
@@ -55,7 +55,13 @@ export async function POST(req) {
       : openai('gpt-4o'),
     system,
     messages,
-    tools,
+    tools: {
+      getKnowledgeBase,
+      getWeather,
+      generatePosts,
+      generateChart,
+      ...mcpTools
+    },
     toolCallStreaming: true,
     maxSteps: 5,
     experimental_telemetry: { isEnabled: true },
