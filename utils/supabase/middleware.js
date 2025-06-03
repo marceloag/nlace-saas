@@ -37,7 +37,9 @@ export async function updateSession(request) {
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/auth')
+    !request.nextUrl.pathname.startsWith('/auth') &&
+    !request.nextUrl.pathname.startsWith('/mcp') &&
+    !request.nextUrl.pathname.startsWith('/api/mcp')
   ) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
