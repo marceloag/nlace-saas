@@ -34,13 +34,12 @@ export async function POST(req) {
   //   })
   // })
 
+  const mcpUrl = `${process.env.NEXT_PUBLIC_URL}/api/mcp`;
+
   const customClient = await createMCPClient({
-    transport: new StreamableHTTPClientTransport(
-      `${process.env.NEXT_PUBLIC_URL}/api/mcp`,
-      {
-        sessionId: 'session_123'
-      }
-    )
+    transport: new StreamableHTTPClientTransport(mcpUrl, {
+      sessionId: 'session_123'
+    })
   });
 
   const mcpToolsDice = await customClient.tools();
@@ -78,7 +77,7 @@ export async function POST(req) {
       console.log(response.usage);
       console.log(JSON.stringify(response, null, 2));
       // MCP
-      await mcpClient.close();
+      await customClient.close();
     },
     onToolCall(tool, input) {
       console.log('Tool:', tool.name, 'Input:', input);
