@@ -10,6 +10,7 @@ import { systemPrompt } from '@/lib/constants/prompts'
 // MCP
 import { experimental_createMCPClient as createMCPClient } from 'ai'
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio'
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp'
 // SUPABASE
 
 export const maxDuration = 45
@@ -35,6 +36,20 @@ export async function POST(req) {
 
   const mcpTools = await mcpClient.tools()
 
+  // MCP in /api test
+  // const transport = new StreamableHTTPClientTransport(
+  //   new URL('http://localhost:3000/api/mcp')
+  // )
+  const customClient = await createMCPClient({
+    transport: new StreamableHTTPClientTransport('http://localhost:3000/api/mcp', {
+      sessionId: 'session_123',
+    }),
+  })
+
+  const mcpToolsDice = await customClient.tools()
+
+  // console.log(mcpToolsDice)
+
   // END MCP
 
   const messagesHavePDF = messages.some((message) =>
@@ -57,10 +72,9 @@ export async function POST(req) {
     messages,
     tools: {
       getKnowledgeBase,
-      getWeather,
       generatePosts,
       generateChart,
-      ...mcpTools
+      ...mcpToolsDice
     },
     toolCallStreaming: true,
     maxSteps: 5,
