@@ -36,7 +36,7 @@ export async function POST(req) {
 
   const customClient = await createMCPClient({
     transport: new StreamableHTTPClientTransport(
-      'http://localhost:3000/api/mcp',
+      `${process.env.NEXT_PUBLIC_URL}/api/mcp`,
       {
         sessionId: 'session_123'
       }
