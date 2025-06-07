@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NLACE - Sistema de Agentes con RAG para Gestión del Conocimiento
 
-## Getting Started
+NLACE es una plataforma SaaS basada en Next.js que implementa un sistema de agentes con Retrieval Augmented Generation (RAG) para la gestión del conocimiento. El sistema permite a los agentes tomar acciones a través del Model Context Protocol (MCP), interactuando con servicios externos y bases de conocimiento.
 
-First, run the development server:
+## Tecnologías Utilizadas
+
+### Frontend
+- **Next.js**: Framework React para renderizado del lado del servidor y generación de sitios estáticos
+- **Tailwind CSS**: Framework de utilidades CSS para diseño rápido y responsivo
+- **Radix UI**: Componentes de interfaz de usuario accesibles y sin estilos
+- **Zustand**: Biblioteca ligera de gestión de estado
+
+### Backend y AI
+- **AI SDK**: SDK para integrar modelos de IA como OpenAI y Anthropic
+- **Pinecone**: Base de datos vectorial para almacenamiento y búsqueda de embeddings
+- **MCP (Model Context Protocol)**: Protocolo para permitir que los modelos de IA interactúen con herramientas externas
+- **Supabase**: Base de datos PostgreSQL con autenticación y almacenamiento
+
+### Modelos de IA
+- **OpenAI (GPT-4o)**: Para procesamiento de texto y generación de respuestas
+- **Anthropic (Claude 3.5 Sonnet)**: Para procesamiento de documentos PDF y generación de respuestas
+- **Embeddings de OpenAI**: Para vectorización de texto y búsqueda semántica
+
+## Características Principales
+
+- **Sistema RAG**: Recuperación y generación aumentada para respuestas basadas en conocimiento
+- **Agentes de IA**: Agentes que pueden tomar decisiones y ejecutar acciones
+- **MCP (Model Context Protocol)**: Permite a los agentes interactuar con servicios externos
+- **Integración con Metricool**: Programación de publicaciones en redes sociales
+- **Generación de imágenes y gráficos**: Capacidad para crear contenido visual
+- **Base de conocimiento vectorial**: Almacenamiento y recuperación eficiente de información
+
+## Configuración del Entorno
+
+Crea un archivo `.env.local` con las siguientes variables:
+
+```
+NEXT_PUBLIC_URL=http://localhost:3000
+PINECONE_API_KEY=tu_clave_api_de_pinecone
+NEXT_PUBLIC_METRICOOL_USER_TOKEN=tu_token_de_metricool
+NEXT_PUBLIC_METRICOOL_USER_ID=tu_id_de_usuario_metricool
+NEXT_PUBLIC_METRICOOL_BLOG_ID=tu_id_de_blog_metricool
+```
+
+## Instalación y Ejecución
+
+1. Clona el repositorio
+
+```bash
+git clone https://github.com/tu-usuario/nlace-saas.git
+cd nlace-saas
+```
+
+2. Instala las dependencias
+
+```bash
+npm install
+# o
+yarn install
+```
+
+3. Ejecuta el servidor de desarrollo
 
 ```bash
 npm run dev
-# or
+# o
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Abre [http://localhost:3000](http://localhost:3000) en tu navegador
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Estructura del Proyecto
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+/
+├── app/                    # Directorio principal de Next.js App Router
+│   ├── actions/            # Acciones del servidor
+│   ├── api/                # Rutas de API
+│   │   ├── chat/           # Endpoint para el chat con IA
+│   │   └── mcp/            # Endpoints para MCP (Model Context Protocol)
+│   │       └── dice/       # Ejemplo de herramienta MCP (dados)
+│   ├── auth/               # Rutas de autenticación
+│   ├── dashboard/          # Interfaz principal de la aplicación
+│   └── page.js             # Página principal
+├── components/             # Componentes React reutilizables
+├── context/                # Contextos de React
+├── lib/                    # Utilidades y funciones
+│   ├── ai/                 # Funcionalidades de IA
+│   │   ├── embeddings.js   # Generación y búsqueda de embeddings
+│   │   └── tools/          # Herramientas para los agentes de IA
+│   │       ├── getKnowledgeBase.js  # Herramienta RAG para consultar la base de conocimiento
+│   │       ├── generateChart.js     # Generación de gráficos
+│   │       ├── generateImage.js     # Generación de imágenes
+│   │       ├── generatePosts.js     # Generación de publicaciones
+│   │       └── getWeather.js        # Obtención de información meteorológica
+├── mcp/                    # Configuración de MCP
+├── prisma/                 # Esquema de Prisma para la base de datos
+├── public/                 # Archivos estáticos
+├── stores/                 # Tiendas de estado (Zustand)
+└── utils/                  # Utilidades generales
+```
 
-## Learn More
+## Cómo Funciona
 
-To learn more about Next.js, take a look at the following resources:
+1. **Sistema RAG**: Cuando un usuario hace una pregunta, el sistema busca información relevante en la base de conocimiento utilizando embeddings y Pinecone.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Agentes de IA**: Los agentes procesan la consulta junto con la información recuperada y generan una respuesta contextualmente relevante.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3. **MCP (Model Context Protocol)**: Permite a los agentes ejecutar acciones como programar publicaciones en redes sociales, generar imágenes o crear gráficos.
 
-## Deploy on Vercel
+4. **Integración con Servicios Externos**: El sistema puede interactuar con servicios como Metricool para programar publicaciones en redes sociales.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contribución
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Si deseas contribuir al proyecto, por favor:
+
+1. Haz un fork del repositorio
+2. Crea una rama para tu característica (`git checkout -b feature/nueva-caracteristica`)
+3. Haz commit de tus cambios (`git commit -am 'Añadir nueva característica'`)
+4. Haz push a la rama (`git push origin feature/nueva-caracteristica`)
+5. Crea un nuevo Pull Request
