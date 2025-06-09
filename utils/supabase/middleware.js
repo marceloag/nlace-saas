@@ -38,7 +38,8 @@ export async function updateSession(request) {
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/auth') &&
-    !request.nextUrl.pathname.startsWith('/api/mcp')
+    !request.nextUrl.pathname.startsWith('/api/mcp') &&
+    !request.nextUrl.pathname.startsWith('/api/mcp-trello/mcp')
   ) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';

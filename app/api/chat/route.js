@@ -44,6 +44,15 @@ export async function POST(req) {
 
   const mcpToolsDice = await customClient.tools();
 
+  // MCP TRELLO
+  const mcpTrelloUrl = `${process.env.NEXT_PUBLIC_URL}/api/mcp-trello/mcp`;
+
+  const customClientTrello = await createMCPClient({
+    transport: new StreamableHTTPClientTransport(mcpTrelloUrl)
+  });
+
+  const mcpToolsTrello = await customClientTrello.tools();
+
   // END MCP
 
   const messagesHavePDF = messages.some((message) =>
@@ -68,7 +77,8 @@ export async function POST(req) {
       getKnowledgeBase,
       generatePosts,
       generateChart,
-      ...mcpToolsDice
+      ...mcpToolsDice,
+      ...mcpToolsTrello
     },
     toolCallStreaming: true,
     maxSteps: 5,
@@ -78,6 +88,7 @@ export async function POST(req) {
       console.log(JSON.stringify(response, null, 2));
       // MCP
       await customClient.close();
+      await customClientTrello.close();
     },
     onToolCall(tool, input) {
       console.log('Tool:', tool.name, 'Input:', input);
