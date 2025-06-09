@@ -72,7 +72,6 @@ export async function POST(req) {
       getKnowledgeBase,
       generatePosts,
       generateChart,
-      get_Weather,
       ...mcpToolsDice,
       ...mcpToolsTrello,
       ...firecrawlTools
