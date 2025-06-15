@@ -3,25 +3,17 @@ import { createClient } from '@/utils/supabase/server'
 import { EditIcon } from '@/components/icons/Icons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import UserForm from '@/components/users/CreateUser'
+import OrganizationForm from '@/components/organizations/createOrganization'
 import EditUser from '@/components/users/EditUser'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 
@@ -119,7 +111,7 @@ async function Usuarios() {
                     <Button>Agregar Organización</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[600px]">
-                    <UserForm />
+                    <OrganizationForm />
                   </DialogContent>
                 </Dialog>
               </div>

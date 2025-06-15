@@ -1,118 +1,132 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { createAccount, getAccounts } from '../../app/actions/usuarios';
-import { AlertCircle } from 'lucide-react';
+'use client'
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { createAccount, getAccounts } from '../../app/actions/usuarios'
+import { AlertCircle } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import { getOrganizations } from '../../app/actions/organizations'
 
 export default function UserForm() {
-  const [accounts, setAccounts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [organizations, setOrganizations] = useState([])
+  const [accounts, setAccounts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const fetchOrganizations = async () => {
+      const data = await getOrganizations()
+      setOrganizations(data)
+    }
+    fetchOrganizations()
     const fetchAccounts = async () => {
-      const data = await getAccounts();
-      setAccounts(data);
-    };
-    fetchAccounts();
-  }, []);
+      const data = await getAccounts()
+      setAccounts(data)
+    }
+    fetchAccounts()
+  }, [])
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     selectedAccounts: []
-  });
+  })
 
   // Estado para mensajes de error
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({})
 
   // Manejador de cambios en inputs de texto
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: value
-    }));
+    }))
     // Limpiar error cuando el usuario empieza a escribir
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: ''
-      }));
+      }))
     }
-  };
+  }
 
   // Manejador para checkbox de cuentas
   const handleAccountToggle = (accountId) => {
     setFormData((prev) => {
       const selectedAccounts = prev.selectedAccounts.includes(accountId)
         ? prev.selectedAccounts.filter((id) => id !== accountId)
-        : [...prev.selectedAccounts, accountId];
+        : [...prev.selectedAccounts, accountId]
 
       return {
         ...prev,
         selectedAccounts
-      };
-    });
+      }
+    })
     // Limpiar error de cuentas si existe
     if (errors.accounts) {
       setErrors((prev) => ({
         ...prev,
         accounts: ''
-      }));
+      }))
     }
-  };
+  }
 
   // Validación del formulario
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = 'El nombre es requerido';
+      newErrors.name = 'El nombre es requerido'
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'El correo es requerido';
+      newErrors.email = 'El correo es requerido'
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Correo electrónico inválido';
+      newErrors.email = 'Correo electrónico inválido'
     }
 
     if (formData.selectedAccounts.length === 0) {
-      newErrors.accounts = 'Debe seleccionar al menos una cuenta';
+      newErrors.accounts = 'Debe seleccionar al menos una cuenta'
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   // Manejador de envío del formulario
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!validateForm()) {
-      return;
+      return
     }
 
     try {
-      await createAccount(formData);
+      await createAccount(formData)
       setFormData({
         name: '',
         email: '',
         selectedAccounts: []
-      });
+      })
       // Revalidar path para obtener los usuarios actualizados
     } catch (error) {
-      console.log(error);
+      console.log(error)
       setErrors((prev) => ({
         ...prev,
         submit: 'Error al guardar el usuario'
-      }));
+      }))
     }
-  };
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -149,6 +163,39 @@ export default function UserForm() {
             />
             {errors.email && (
               <span className="text-sm text-red-500">{errors.email}</span>
+            )}
+          </div>
+
+          {/* Campo de organizacion Dropdown */}
+          <div className="space-y-2">
+            <Label htmlFor="organization">Organización</Label>
+            <Select
+              value={formData.organization}
+              onValueChange={(value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  organization: value
+                }))
+              }
+            >
+              <SelectTrigger className="text-md p-2 h-12">
+                <SelectValue
+                  placeholder="Seleccionar Organización"
+                  className="p-4"
+                />
+              </SelectTrigger>
+              <SelectContent className="max-h-[200px] overflow-y-auto">
+                {organizations.map((organization) => (
+                  <SelectItem key={organization.id} value={organization.id}>
+                    {organization.nombre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.organization && (
+              <span className="text-sm text-red-500">
+                {errors.organization}
+              </span>
             )}
           </div>
 
@@ -189,5 +236,5 @@ export default function UserForm() {
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }
